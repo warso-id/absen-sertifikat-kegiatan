@@ -726,6 +726,14 @@
             pointer-events: none;
             width: 90%;
             max-width: 400px;
+            line-height: 1.6;
+        }
+        .popup-success small {
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            margin-top: 8px;
+            color: #bbf7d0;
         }
         @keyframes popIn {
             from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
@@ -1114,24 +1122,21 @@
 <script>
     // ===================== KONFIGURASI =====================
     var API_URL = 'https://script.google.com/macros/s/AKfycbwVbaaj7XhoH0PBO97NQl1K3anQI8r5C01JAa3eaBqDF1tJEvAM6D9ZP8Qx548eUxI0dA/exec';
-    var FETCH_TIMEOUT = 60000; // 60 detik (ditingkatkan untuk sertifikat)
+    var FETCH_TIMEOUT = 60000;
     var SHEET_NAME = 'Pelatihan SEM SmartPLS';
-    var MAX_RETRIES = 1; // Dikurangi dari 3 menjadi 1 untuk hindari rate limit
-    var RETRY_DELAY = 5000; // 5 detik
+    var MAX_RETRIES = 1;
+    var RETRY_DELAY = 5000;
     var API_KEY = '';
 
-    // ===================== KONFIGURASI WAKTU (HARDCODED) =====================
     var CONFIG_WAKTU = {
         tanggal: '2026-08-24',
         mulai: '09:00',
         selesai: '59:00'
     };
 
-    // ===================== STATE MANAGEMENT =====================
     var isSubmitting = false;
     var submitAttempts = 0;
 
-    // ===================== ELEMEN =====================
     var form = document.getElementById('registrationForm');
     var submitButton = document.getElementById('submitButton');
     var statusBox = document.getElementById('status');
@@ -1152,17 +1157,14 @@
     var displayTanggal = document.getElementById('displayTanggal');
     var displayWaktu = document.getElementById('displayWaktu');
 
-    // ===================== COUNTDOWN VARIABLES =====================
     var countdownInterval = null;
 
-    // ===================== FORMAT TANGGAL UNTUK DISPLAY =====================
     function formatTanggalDisplay(tanggalStr) {
         var parts = tanggalStr.split('-');
         var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
         return parseInt(parts[2]) + ' ' + months[parseInt(parts[1]) - 1] + ' ' + parts[0];
     }
 
-    // ===================== FUNGSI CEK WAKTU FORM =====================
     function checkFormAccess() {
         var now = new Date();
         var startDateTime = new Date(CONFIG_WAKTU.tanggal + 'T' + CONFIG_WAKTU.mulai + ':00');
@@ -1216,7 +1218,6 @@
         }, 3000);
     }
 
-    // ===================== MODAL FUNCTIONS =====================
     function showLockModal(message) {
         lockModalMessage.textContent = message;
         lockModalInfo.innerHTML = '📅 Tanggal: ' + formatTanggalDisplay(CONFIG_WAKTU.tanggal) + '<br>⏰ Waktu: ' + CONFIG_WAKTU.mulai + ' - ' + CONFIG_WAKTU.selesai + ' WIB';
@@ -1262,10 +1263,8 @@
         }
     }
 
-    // ===================== MODAL CLOSE =====================
     lockCloseBtn.addEventListener('click', hideLockModal);
 
-    // ===================== SPLASH INTERACTION =====================
     splashScreen.addEventListener('click', function() {
         splashScreen.classList.add('splash-hidden');
         checkFormAccess();
@@ -1278,14 +1277,12 @@
         }
     });
 
-    // ===================== BASE64 (KOMPATIBEL LAMA) =====================
     function encodeBase64(data) {
         var json = JSON.stringify(data);
         var utf8 = unescape(encodeURIComponent(json));
         return btoa(utf8);
     }
 
-    // ===================== NORMALISASI WHATSAPP =====================
     function normalizeWhatsApp(number) {
         if (!number) return '';
         var phone = String(number).trim().replace(/[^\d+]/g, '');
@@ -1296,7 +1293,6 @@
         return phone;
     }
 
-    // ===================== VALIDASI =====================
     function isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
@@ -1306,7 +1302,6 @@
         return /^628\d{7,13}$/.test(phone);
     }
 
-    // ===================== DEBOUNCE =====================
     function debounce(func, wait) {
         var timeout;
         return function() {
@@ -1321,7 +1316,6 @@
         };
     }
 
-    // ===================== STATUS =====================
     function showStatus(type, message) {
         statusBox.className = 'status show ' + type;
         statusBox.textContent = message;
@@ -1332,7 +1326,6 @@
         statusBox.textContent = '';
     }
 
-    // ===================== LIVE SYNC INDICATOR =====================
     function setSyncStatus(status) {
         if (status === 'syncing') {
             syncDot.className = 'sync-dot syncing';
@@ -1349,7 +1342,6 @@
         }
     }
 
-    // ===================== FIELD ERROR =====================
     function showFieldError(fieldId, message) {
         var errorElement = document.getElementById(fieldId + 'Error');
         if (errorElement) {
@@ -1378,7 +1370,6 @@
         }
     }
 
-    // ===================== LOADING =====================
     function setLoading(loading) {
         submitButton.disabled = loading;
         if (loading) {
@@ -1390,7 +1381,6 @@
         }
     }
 
-    // ===================== CLIENT ID =====================
     function getClientId() {
         var clientId = localStorage.getItem('clientId');
         if (!clientId) {
@@ -1400,7 +1390,6 @@
         return clientId;
     }
 
-    // ===================== GET SELECTED RADIO =====================
     function getSelectedRadioValue(groupName) {
         var radios = document.getElementsByName(groupName);
         var validValues = {
@@ -1440,7 +1429,6 @@
         return false;
     }
 
-    // ===================== VALIDASI RADIO REAL-TIME =====================
     function validatePeranRealTime() {
         var selectedPeran = getSelectedRadioValue('peran');
         var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
@@ -1473,7 +1461,6 @@
         }
     }
 
-    // ===================== AUTO-SAVE DRAFT =====================
     var saveDraft = debounce(function() {
         var draft = {
             peran: getSelectedRadioValue('peran'),
@@ -1487,7 +1474,6 @@
         setSyncStatus('synced');
     }, 500);
 
-    // ===================== LOAD DRAFT =====================
     function loadDraft() {
         var draft = localStorage.getItem('formDraft');
         if (draft) {
@@ -1510,7 +1496,6 @@
         localStorage.removeItem('formDraft');
     }
 
-    // ===================== VALIDASI REAL-TIME =====================
     var validateFieldRealTime = debounce(function(fieldId) {
         var field = document.getElementById(fieldId);
         if (!field || field.disabled) return;
@@ -1536,7 +1521,6 @@
         }
     }, 300);
 
-    // ===================== EVENT LISTENERS =====================
     var textFields = ['nama', 'email', 'whatsapp'];
     for (var i = 0; i < textFields.length; i++) {
         (function(fieldId) {
@@ -1572,7 +1556,6 @@
         });
     }
 
-    // ===================== KONFIRMASI DIALOG =====================
     var pendingSubmitData = null;
 
     function showConfirmation(data) {
@@ -1603,7 +1586,6 @@
         setTimeout(clearStatus, 3000);
     });
 
-    // ===================== FETCH DENGAN TIMEOUT =====================
     function fetchWithTimeout(url, options, timeout) {
         timeout = timeout || FETCH_TIMEOUT;
         return new Promise(function(resolve, reject) {
@@ -1637,7 +1619,7 @@
         });
     }
 
-    // ===================== SUBMIT KE SERVER =====================
+    // ===================== SUBMIT KE SERVER (DENGAN DETEKSI ANTRIAN) =====================
     function submitToServer(payload, retryCount) {
         retryCount = retryCount || 0;
         setLoading(true);
@@ -1700,16 +1682,29 @@
             
             if (jsonResult.success) {
                 var certMsg = '';
-                if (jsonResult.certificate && jsonResult.certificate.success) {
-                    certMsg = ' ✅ Sertifikat berhasil dikirim ke email.';
-                } else if (jsonResult.certificate && !jsonResult.certificate.success) {
-                    certMsg = ' ⚠️ Absen tersimpan, tetapi sertifikat gagal dikirim.';
+                var certStatus = jsonResult.certificate;
+                
+                if (certStatus && certStatus.success) {
+                    // Email langsung terkirim
+                    certMsg = ' ✅ Sertifikat berhasil dikirim ke email Anda.';
+                } else if (certStatus && !certStatus.success && certStatus.message && certStatus.message.indexOf('antrian') !== -1) {
+                    // Email masuk antrian (kuota habis)
+                    certMsg = ' ⏳ Sertifikat berhasil dibuat! Email akan dikirim otomatis besok (kuota harian habis).';
+                } else if (certStatus && !certStatus.success) {
+                    // PDF dibuat tapi email gagal (bukan karena kuota)
+                    certMsg = ' ⚠️ Absen tersimpan, tetapi sertifikat gagal dikirim. Panitia akan memproses ulang.';
                 } else {
+                    // Data tersimpan tanpa sertifikat
                     certMsg = ' ✅ Data tersimpan.';
                 }
+                
                 showStatus('success', '✅ Absen berhasil dikirim!' + certMsg);
                 setSyncStatus('synced');
+                
+                // Tampilkan popup dengan pesan yang lebih informatif
+                popupSuccess.innerHTML = '🎉 ABSEN BERHASIL DIKIRIM! 🎉<small>' + certMsg + '</small>';
                 popupSuccess.style.display = 'block';
+                
                 form.reset();
                 clearDraft();
                 isSubmitting = false;
@@ -1718,7 +1713,8 @@
                     popupSuccess.style.display = 'none';
                     splashScreen.classList.remove('splash-hidden');
                     splashScreen.focus();
-                }, 5000);
+                }, 8000);
+                
             } else if (jsonResult.duplicate && jsonResult.field === 'email') {
                 showStatus('warning', '⚠️ Email sudah terdaftar. Gunakan email lain.');
                 showFieldError('email', 'Email sudah terdaftar');
