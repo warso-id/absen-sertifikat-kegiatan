@@ -22,6 +22,7 @@
         html {
             -webkit-text-size-adjust: 100%;
             -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
             scroll-behavior: smooth;
         }
@@ -31,8 +32,14 @@
             min-height: 100dvh;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, sans-serif;
             background: radial-gradient(circle at 20% 30%, #14532d, #052e16 80%);
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
             padding: 20px max(12px, env(safe-area-inset-left));
             padding-bottom: max(20px, env(safe-area-inset-bottom));
@@ -53,8 +60,14 @@
             height: 100vh;
             height: 100dvh;
             background: radial-gradient(circle at center, #064e3b, #022c22 70%);
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             z-index: 9999;
             cursor: pointer;
@@ -88,8 +101,15 @@
         .splash-content {
             position: relative;
             z-index: 2;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
             flex-direction: column;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
             gap: 30px;
             padding: 20px;
@@ -99,8 +119,14 @@
             position: relative;
             width: min(70vw, 350px);
             height: min(70vw, 350px);
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
         }
 
@@ -148,6 +174,8 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px rgba(74, 222, 128, 0.3);
             animation: logoPulse 2.5s infinite alternate ease-in-out;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
             user-select: none;
             pointer-events: none;
             position: relative;
@@ -264,7 +292,11 @@
         .logo-fallback {
             display: none;
             font-size: 60px;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             width: 100%;
             height: 100%;
@@ -302,27 +334,43 @@
             margin-bottom: 12px;
         }
         .event-item {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
             gap: 10px;
             margin: 7px 0;
             font-size: 14px;
             color: #d1fae5;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
         }
         .event-icon {
             font-size: 18px;
+            -ms-flex-negative: 0;
             flex-shrink: 0;
         }
 
         .form {
             margin-top: 25px;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
             flex-direction: column;
             gap: 18px;
         }
         .form-group {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
             flex-direction: column;
             gap: 6px;
         }
@@ -381,7 +429,10 @@
 
         /* RADIO BUTTON STYLES */
         .radio-group {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
             gap: 12px;
             margin-top: 4px;
@@ -395,6 +446,8 @@
         }
         .radio-option {
             position: relative;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
             flex: 1;
             min-width: 120px;
         }
@@ -411,8 +464,14 @@
             cursor: not-allowed;
         }
         .radio-label {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             gap: 8px;
             padding: 14px 16px;
@@ -425,8 +484,10 @@
             cursor: pointer;
             transition: all 0.25s;
             text-align: center;
-            user-select: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             min-height: 50px;
         }
         .radio-option input[type="radio"]:checked + .radio-label {
@@ -534,8 +595,14 @@
         }
 
         .button-loading {
+            display: -webkit-inline-box;
+            display: -ms-inline-flexbox;
             display: inline-flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             gap: 8px;
         }
@@ -590,8 +657,14 @@
         }
 
         .live-sync {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             gap: 8px;
             margin-top: 15px;
@@ -600,6 +673,7 @@
             border-radius: 12px;
             font-size: 12px;
             color: #86efac;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
         }
         .sync-dot {
@@ -666,12 +740,18 @@
             height: 100%;
             background: rgba(0,0,0,0.8);
             display: none;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             z-index: 9998;
             padding: 20px;
         }
         .confirmation-dialog.active {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
         }
         .confirmation-content {
@@ -688,10 +768,15 @@
             color: #bbf7d0;
         }
         .confirmation-buttons {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
             gap: 12px;
             margin-top: 20px;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
+            -ms-flex-wrap: wrap;
             flex-wrap: wrap;
         }
         .confirm-btn {
@@ -721,13 +806,19 @@
             height: 100%;
             background: rgba(0,0,0,0.85);
             display: none;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
             align-items: center;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
             justify-content: center;
             z-index: 10001;
             padding: 20px;
             animation: fadeIn 0.3s ease;
         }
         .lock-modal.active {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
         }
         @keyframes fadeIn {
@@ -830,7 +921,12 @@
                 height: min(60vw, 250px);
             }
             .event-item {
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -ms-flex-direction: column;
                 flex-direction: column;
+                -webkit-box-align: start;
+                -ms-flex-align: start;
                 align-items: flex-start;
             }
             .lock-modal-content {
@@ -1017,70 +1113,73 @@
 
 <script>
     // ===================== KONFIGURASI =====================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwVbaaj7XhoH0PBO97NQl1K3anQI8r5C01JAa3eaBqDF1tJEvAM6D9ZP8Qx548eUxI0dA/exec';
-    const FETCH_TIMEOUT = 15000; // 15 detik
-    const SHEET_NAME = 'Pelatihan SEM SmartPLS';
-    const MAX_RETRIES = 3;
-    const RETRY_DELAY = 2000;
-    const API_KEY = ''; // isi jika backend membutuhkan API key
+    var API_URL = 'https://script.google.com/macros/s/AKfycbwVbaaj7XhoH0PBO97NQl1K3anQI8r5C01JAa3eaBqDF1tJEvAM6D9ZP8Qx548eUxI0dA/exec';
+    var FETCH_TIMEOUT = 30000; // 30 detik (ditingkatkan untuk kompatibilitas)
+    var SHEET_NAME = 'Pelatihan SEM SmartPLS';
+    var MAX_RETRIES = 3;
+    var RETRY_DELAY = 2000;
+    var API_KEY = ''; // isi jika backend membutuhkan API key
 
     // ===================== KONFIGURASI WAKTU (HARDCODED) =====================
-    const CONFIG_WAKTU = {
+    var CONFIG_WAKTU = {
         tanggal: '2026-08-24',    // Format: YYYY-MM-DD
         mulai: '09:00',            // Format: HH:MM (24 jam)
         selesai: '59:00'           // Format: HH:MM (24 jam)
     };
 
     // ===================== STATE MANAGEMENT =====================
-    let isSubmitting = false;
+    var isSubmitting = false;
 
     // ===================== ELEMEN =====================
-    const form = document.getElementById('registrationForm');
-    const submitButton = document.getElementById('submitButton');
-    const statusBox = document.getElementById('status');
-    const splashScreen = document.getElementById('splashScreen');
-    const popupSuccess = document.getElementById('popupSuccess');
-    const confirmationDialog = document.getElementById('confirmationDialog');
-    const confirmationData = document.getElementById('confirmationData');
-    const confirmYes = document.getElementById('confirmYes');
-    const confirmNo = document.getElementById('confirmNo');
-    const syncDot = document.getElementById('syncDot');
-    const syncText = document.getElementById('syncText');
-    const formLockStatus = document.getElementById('formLockStatus');
-    const lockModal = document.getElementById('lockModal');
-    const lockModalMessage = document.getElementById('lockModalMessage');
-    const lockModalInfo = document.getElementById('lockModalInfo');
-    const countdownTimer = document.getElementById('countdownTimer');
-    const lockCloseBtn = document.getElementById('lockCloseBtn');
-    const displayTanggal = document.getElementById('displayTanggal');
-    const displayWaktu = document.getElementById('displayWaktu');
+    var form = document.getElementById('registrationForm');
+    var submitButton = document.getElementById('submitButton');
+    var statusBox = document.getElementById('status');
+    var splashScreen = document.getElementById('splashScreen');
+    var popupSuccess = document.getElementById('popupSuccess');
+    var confirmationDialog = document.getElementById('confirmationDialog');
+    var confirmationData = document.getElementById('confirmationData');
+    var confirmYes = document.getElementById('confirmYes');
+    var confirmNo = document.getElementById('confirmNo');
+    var syncDot = document.getElementById('syncDot');
+    var syncText = document.getElementById('syncText');
+    var formLockStatus = document.getElementById('formLockStatus');
+    var lockModal = document.getElementById('lockModal');
+    var lockModalMessage = document.getElementById('lockModalMessage');
+    var lockModalInfo = document.getElementById('lockModalInfo');
+    var countdownTimer = document.getElementById('countdownTimer');
+    var lockCloseBtn = document.getElementById('lockCloseBtn');
+    var displayTanggal = document.getElementById('displayTanggal');
+    var displayWaktu = document.getElementById('displayWaktu');
 
     // ===================== COUNTDOWN VARIABLES =====================
-    let countdownInterval = null;
+    var countdownInterval = null;
 
     // ===================== FORMAT TANGGAL UNTUK DISPLAY =====================
     function formatTanggalDisplay(tanggalStr) {
-        const [year, month, day] = tanggalStr.split('-');
-        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+        var parts = tanggalStr.split('-');
+        var year = parts[0];
+        var month = parts[1];
+        var day = parts[2];
+        var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        return parseInt(day) + ' ' + months[parseInt(month) - 1] + ' ' + year;
     }
 
     // ===================== FUNGSI CEK WAKTU FORM =====================
     function checkFormAccess() {
-        const tanggal = CONFIG_WAKTU.tanggal;
-        const mulai = CONFIG_WAKTU.mulai;
-        const selesai = CONFIG_WAKTU.selesai;
+        var tanggal = CONFIG_WAKTU.tanggal;
+        var mulai = CONFIG_WAKTU.mulai;
+        var selesai = CONFIG_WAKTU.selesai;
         
-        const now = new Date();
-        const startDateTime = new Date(`${tanggal}T${mulai}:00`);
-        const endDateTime = new Date(`${tanggal}T${selesai}:00`);
+        var now = new Date();
+        var startDateTime = new Date(tanggal + 'T' + mulai + ':00');
+        var endDateTime = new Date(tanggal + 'T' + selesai + ':00');
         
         if (now < startDateTime) {
-            const timeDiff = startDateTime - now;
-            const hours = Math.floor(timeDiff / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            lockForm(`🔒 Form akan dibuka dalam ${hours} jam ${minutes} menit.`);
-            showLockModal(`Form akan dibuka dalam ${hours} jam ${minutes} menit.`);
+            var timeDiff = startDateTime - now;
+            var hours = Math.floor(timeDiff / (1000 * 60 * 60));
+            var minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+            lockForm('🔒 Form akan dibuka dalam ' + hours + ' jam ' + minutes + ' menit.');
+            showLockModal('Form akan dibuka dalam ' + hours + ' jam ' + minutes + ' menit.');
             startCountdown(startDateTime);
         } else if (now > endDateTime) {
             lockForm('🔒 Form sudah ditutup. Waktu pelaksanaan telah berakhir.');
@@ -1098,9 +1197,10 @@
         formLockStatus.className = 'status warning show';
         formLockStatus.textContent = message;
         
-        document.querySelectorAll('#registrationForm input').forEach(input => {
-            input.disabled = true;
-        });
+        var inputs = document.querySelectorAll('#registrationForm input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = true;
+        }
         submitButton.disabled = true;
         submitButton.textContent = '🔒 Form Terkunci';
     }
@@ -1110,13 +1210,14 @@
         formLockStatus.className = 'status success show';
         formLockStatus.textContent = '✅ Form sudah dibuka. Silakan isi absen Anda.';
         
-        document.querySelectorAll('#registrationForm input').forEach(input => {
-            input.disabled = false;
-        });
+        var inputs = document.querySelectorAll('#registrationForm input');
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = false;
+        }
         submitButton.disabled = false;
         submitButton.textContent = '✨ Kirim Absen ✨';
         
-        setTimeout(() => {
+        setTimeout(function() {
             formLockStatus.className = 'status';
         }, 3000);
     }
@@ -1124,10 +1225,7 @@
     // ===================== MODAL FUNCTIONS =====================
     function showLockModal(message) {
         lockModalMessage.textContent = message;
-        lockModalInfo.innerHTML = `
-            📅 Tanggal: ${formatTanggalDisplay(CONFIG_WAKTU.tanggal)}<br>
-            ⏰ Waktu: ${CONFIG_WAKTU.mulai} - ${CONFIG_WAKTU.selesai} WIB
-        `;
+        lockModalInfo.innerHTML = '📅 Tanggal: ' + formatTanggalDisplay(CONFIG_WAKTU.tanggal) + '<br>⏰ Waktu: ' + CONFIG_WAKTU.mulai + ' - ' + CONFIG_WAKTU.selesai + ' WIB';
         lockModal.classList.add('active');
     }
 
@@ -1139,8 +1237,8 @@
         stopCountdown();
         
         function updateCountdown() {
-            const now = new Date();
-            const diff = targetDate - now;
+            var now = new Date();
+            var diff = targetDate - now;
             
             if (diff <= 0) {
                 stopCountdown();
@@ -1148,9 +1246,9 @@
                 return;
             }
             
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            var hours = Math.floor(diff / (1000 * 60 * 60));
+            var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((diff % (1000 * 60)) / 1000);
             
             countdownTimer.textContent = 
                 String(hours).padStart(2, '0') + ':' +
@@ -1187,21 +1285,26 @@
 
     // ===================== BASE64 =====================
     function encodeBase64(data) {
-        const json = JSON.stringify(data);
-        const bytes = new TextEncoder().encode(json);
-        let binary = '';
-        bytes.forEach(byte => binary += String.fromCharCode(byte));
+        var json = JSON.stringify(data);
+        var bytes = [];
+        for (var i = 0; i < json.length; i++) {
+            bytes.push(json.charCodeAt(i));
+        }
+        var binary = '';
+        for (var j = 0; j < bytes.length; j++) {
+            binary += String.fromCharCode(bytes[j]);
+        }
         return btoa(binary);
     }
 
     // ===================== NORMALISASI WHATSAPP =====================
     function normalizeWhatsApp(number) {
         if (!number) return '';
-        let phone = String(number).trim().replace(/[^\d+]/g, '');
-        if (phone.startsWith('+62')) phone = '62' + phone.substring(3);
-        else if (phone.startsWith('0062')) phone = '62' + phone.substring(4);
-        else if (phone.startsWith('08')) phone = '62' + phone.substring(1);
-        else if (phone.startsWith('8')) phone = '62' + phone;
+        var phone = String(number).trim().replace(/[^\d+]/g, '');
+        if (phone.indexOf('+62') === 0) phone = '62' + phone.substring(3);
+        else if (phone.indexOf('0062') === 0) phone = '62' + phone.substring(4);
+        else if (phone.indexOf('08') === 0) phone = '62' + phone.substring(1);
+        else if (phone.indexOf('8') === 0) phone = '62' + phone;
         return phone;
     }
 
@@ -1212,17 +1315,18 @@
 
     // ===================== VALIDASI WHATSAPP =====================
     function isValidWhatsApp(number) {
-        const phone = normalizeWhatsApp(number);
+        var phone = normalizeWhatsApp(number);
         return /^628\d{7,13}$/.test(phone);
     }
 
     // ===================== DEBOUNCE =====================
     function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
+        var timeout;
+        return function executedFunction() {
+            var args = arguments;
+            var later = function() {
                 clearTimeout(timeout);
-                func(...args);
+                func.apply(null, args);
             };
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
@@ -1265,15 +1369,14 @@
 
     // ===================== FIELD ERROR =====================
     function showFieldError(fieldId, message) {
-        const errorElement = document.getElementById(fieldId + 'Error');
+        var errorElement = document.getElementById(fieldId + 'Error');
         if (errorElement) {
             errorElement.textContent = message;
             errorElement.classList.add('show');
         }
-        const input = document.getElementById(fieldId);
+        var input = document.getElementById(fieldId);
         if (input) input.setAttribute('aria-invalid', 'true');
         
-        // Tambahkan class error ke radio group jika ada
         if (fieldId === 'peran') {
             document.getElementById('peranRadioGroup').classList.add('error');
         }
@@ -1283,15 +1386,14 @@
     }
 
     function clearFieldError(fieldId) {
-        const errorElement = document.getElementById(fieldId + 'Error');
+        var errorElement = document.getElementById(fieldId + 'Error');
         if (errorElement) {
             errorElement.textContent = '';
             errorElement.classList.remove('show');
         }
-        const input = document.getElementById(fieldId);
+        var input = document.getElementById(fieldId);
         if (input) input.setAttribute('aria-invalid', 'false');
         
-        // Hapus class error dari radio group jika ada
         if (fieldId === 'peran') {
             document.getElementById('peranRadioGroup').classList.remove('error');
         }
@@ -1314,7 +1416,7 @@
 
     // ===================== CLIENT ID =====================
     function getClientId() {
-        let clientId = localStorage.getItem('clientId');
+        var clientId = localStorage.getItem('clientId');
         if (!clientId) {
             clientId = 'cid_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('clientId', clientId);
@@ -1324,28 +1426,26 @@
 
     // ===================== VALIDASI RADIO BUTTON =====================
     function validateRadioGroup(groupName, errorFieldId, errorMessage) {
-        const radios = document.getElementsByName(groupName);
-        let selectedValue = '';
-        let isValid = false;
+        var radios = document.getElementsByName(groupName);
+        var selectedValue = '';
+        var isValid = false;
         
-        // Cek apakah ada yang dipilih
-        for (const radio of radios) {
-            if (radio.checked) {
-                selectedValue = radio.value;
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                selectedValue = radios[i].value;
                 isValid = true;
                 break;
             }
         }
         
-        // Validasi nilai yang dipilih
-        const validValues = {
+        var validValues = {
             'peran': ['Narasumber', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
         };
         
-        if (isValid && validValues[groupName] && !validValues[groupName].includes(selectedValue)) {
+        if (isValid && validValues[groupName] && validValues[groupName].indexOf(selectedValue) === -1) {
             isValid = false;
-            showFieldError(errorFieldId, `Nilai ${groupName} tidak valid`);
+            showFieldError(errorFieldId, 'Nilai ' + groupName + ' tidak valid');
         } else if (!isValid) {
             showFieldError(errorFieldId, errorMessage);
         } else {
@@ -1357,44 +1457,41 @@
 
     // ===================== GET SELECTED RADIO (DENGAN VALIDASI) =====================
     function getSelectedRadioValue(groupName) {
-        const radios = document.getElementsByName(groupName);
+        var radios = document.getElementsByName(groupName);
         
-        // Validasi nilai yang diperbolehkan
-        const validValues = {
+        var validValues = {
             'peran': ['Narasumber', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
         };
         
-        for (const radio of radios) {
-            if (radio.checked) {
-                // Pastikan nilai yang dipilih valid
-                if (validValues[groupName] && validValues[groupName].includes(radio.value)) {
-                    return radio.value;
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].checked) {
+                if (validValues[groupName] && validValues[groupName].indexOf(radios[i].value) !== -1) {
+                    return radios[i].value;
                 } else if (!validValues[groupName]) {
-                    return radio.value;
+                    return radios[i].value;
                 }
             }
         }
-        return ''; // Tidak ada yang dipilih atau nilai tidak valid
+        return '';
     }
 
     // ===================== SET SELECTED RADIO (DENGAN VALIDASI) =====================
     function setSelectedRadioValue(groupName, value) {
-        const radios = document.getElementsByName(groupName);
-        const validValues = {
+        var radios = document.getElementsByName(groupName);
+        var validValues = {
             'peran': ['Narasumber', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
         };
         
-        // Validasi nilai sebelum diset
-        if (validValues[groupName] && !validValues[groupName].includes(value)) {
-            console.error(`Nilai "${value}" tidak valid untuk ${groupName}`);
+        if (validValues[groupName] && validValues[groupName].indexOf(value) === -1) {
+            console.error('Nilai "' + value + '" tidak valid untuk ' + groupName);
             return false;
         }
         
-        for (const radio of radios) {
-            if (radio.value === value) {
-                radio.checked = true;
+        for (var i = 0; i < radios.length; i++) {
+            if (radios[i].value === value) {
+                radios[i].checked = true;
                 return true;
             }
         }
@@ -1403,13 +1500,13 @@
 
     // ===================== VALIDASI PERAN REAL-TIME =====================
     function validatePeranRealTime() {
-        const selectedPeran = getSelectedRadioValue('peran');
-        const validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        var selectedPeran = getSelectedRadioValue('peran');
+        var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
         
         if (!selectedPeran) {
             showFieldError('peran', '⚠️ Silakan pilih salah satu: Narasumber, Panitia, atau Peserta');
             return false;
-        } else if (!validPeran.includes(selectedPeran)) {
+        } else if (validPeran.indexOf(selectedPeran) === -1) {
             showFieldError('peran', '❌ Nilai peran tidak valid. Pilih Narasumber, Panitia, atau Peserta');
             return false;
         } else {
@@ -1420,13 +1517,13 @@
 
     // ===================== VALIDASI KEHADIRAN REAL-TIME =====================
     function validateKehadiranRealTime() {
-        const selectedKehadiran = getSelectedRadioValue('kehadiran');
-        const validKehadiran = ['Offline', 'Online'];
+        var selectedKehadiran = getSelectedRadioValue('kehadiran');
+        var validKehadiran = ['Offline', 'Online'];
         
         if (!selectedKehadiran) {
             showFieldError('kehadiran', '⚠️ Silakan pilih salah satu: Offline atau Online');
             return false;
-        } else if (!validKehadiran.includes(selectedKehadiran)) {
+        } else if (validKehadiran.indexOf(selectedKehadiran) === -1) {
             showFieldError('kehadiran', '❌ Nilai kehadiran tidak valid. Pilih Offline atau Online');
             return false;
         } else {
@@ -1436,8 +1533,8 @@
     }
 
     // ===================== AUTO-SAVE DRAFT =====================
-    const saveDraft = debounce(() => {
-        const draft = {
+    var saveDraft = debounce(function() {
+        var draft = {
             peran: getSelectedRadioValue('peran'),
             nama: document.getElementById('nama').value,
             email: document.getElementById('email').value,
@@ -1451,10 +1548,10 @@
 
     // ===================== LOAD DRAFT =====================
     function loadDraft() {
-        const draft = localStorage.getItem('formDraft');
+        var draft = localStorage.getItem('formDraft');
         if (draft) {
             try {
-                const data = JSON.parse(draft);
+                var data = JSON.parse(draft);
                 if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
                     setSelectedRadioValue('peran', data.peran || '');
                     document.getElementById('nama').value = data.nama || '';
@@ -1474,8 +1571,8 @@
     }
 
     // ===================== VALIDASI REAL-TIME =====================
-    const validateFieldRealTime = debounce((fieldId) => {
-        const field = document.getElementById(fieldId);
+    var validateFieldRealTime = debounce(function(fieldId) {
+        var field = document.getElementById(fieldId);
         if (!field || field.disabled) return;
         
         switch(fieldId) {
@@ -1504,30 +1601,34 @@
     }, 300);
 
     // ===================== EVENT LISTENERS =====================
-    ['nama', 'email', 'whatsapp'].forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-            field.addEventListener('input', () => {
-                if (!field.disabled) {
-                    validateFieldRealTime(fieldId);
-                    saveDraft();
-                    setSyncStatus('syncing');
-                    setTimeout(() => setSyncStatus('synced'), 300);
-                }
-            });
-            field.addEventListener('blur', () => {
-                if (!field.disabled) {
-                    validateFieldRealTime(fieldId);
-                }
-            });
-        }
-    });
+    var textFields = ['nama', 'email', 'whatsapp'];
+    for (var i = 0; i < textFields.length; i++) {
+        (function(fieldId) {
+            var field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('input', function() {
+                    if (!field.disabled) {
+                        validateFieldRealTime(fieldId);
+                        saveDraft();
+                        setSyncStatus('syncing');
+                        setTimeout(function() { setSyncStatus('synced'); }, 300);
+                    }
+                });
+                field.addEventListener('blur', function() {
+                    if (!field.disabled) {
+                        validateFieldRealTime(fieldId);
+                    }
+                });
+            }
+        })(textFields[i]);
+    }
 
     // Event listener untuk radio button peran
-    document.getElementsByName('peran').forEach(radio => {
-        radio.addEventListener('change', function() {
+    var peranRadios = document.getElementsByName('peran');
+    for (var j = 0; j < peranRadios.length; j++) {
+        peranRadios[j].addEventListener('change', function() {
             if (!this.disabled) {
-                const isValid = validatePeranRealTime();
+                var isValid = validatePeranRealTime();
                 if (isValid) {
                     console.log('✅ Peran valid:', this.value);
                 } else {
@@ -1535,16 +1636,17 @@
                 }
                 saveDraft();
                 setSyncStatus('syncing');
-                setTimeout(() => setSyncStatus('synced'), 300);
+                setTimeout(function() { setSyncStatus('synced'); }, 300);
             }
         });
-    });
+    }
 
     // Event listener untuk radio button kehadiran
-    document.getElementsByName('kehadiran').forEach(radio => {
-        radio.addEventListener('change', function() {
+    var kehadiranRadios = document.getElementsByName('kehadiran');
+    for (var k = 0; k < kehadiranRadios.length; k++) {
+        kehadiranRadios[k].addEventListener('change', function() {
             if (!this.disabled) {
-                const isValid = validateKehadiranRealTime();
+                var isValid = validateKehadiranRealTime();
                 if (isValid) {
                     console.log('✅ Kehadiran valid:', this.value);
                 } else {
@@ -1552,36 +1654,35 @@
                 }
                 saveDraft();
                 setSyncStatus('syncing');
-                setTimeout(() => setSyncStatus('synced'), 300);
+                setTimeout(function() { setSyncStatus('synced'); }, 300);
             }
         });
-    });
+    }
 
     // ===================== KONFIRMASI DIALOG =====================
-    let pendingSubmitData = null;
+    var pendingSubmitData = null;
 
     function showConfirmation(data) {
         pendingSubmitData = data;
-        const confirmationHTML = `
-            <strong>👤 Peran:</strong> ${data.peran}<br>
-            <strong>👤 Nama:</strong> ${data.nama}<br>
-            <strong>📧 Email:</strong> ${data.email}<br>
-            <strong>📱 WhatsApp:</strong> ${data.whatsapp}<br>
-            <strong>📍 Kehadiran:</strong> ${data.kehadiran}
-        `;
+        var confirmationHTML = '<strong>👤 Peran:</strong> ' + data.peran + '<br>' +
+            '<strong>👤 Nama:</strong> ' + data.nama + '<br>' +
+            '<strong>📧 Email:</strong> ' + data.email + '<br>' +
+            '<strong>📱 WhatsApp:</strong> ' + data.whatsapp + '<br>' +
+            '<strong>📍 Kehadiran:</strong> ' + data.kehadiran;
         confirmationData.innerHTML = confirmationHTML;
         confirmationDialog.classList.add('active');
     }
 
-    confirmYes.addEventListener('click', async () => {
+    confirmYes.addEventListener('click', function() {
         confirmationDialog.classList.remove('active');
         if (pendingSubmitData) {
-            await submitToServer(pendingSubmitData);
+            var dataToSubmit = pendingSubmitData;
             pendingSubmitData = null;
+            submitToServer(dataToSubmit);
         }
     });
 
-    confirmNo.addEventListener('click', () => {
+    confirmNo.addEventListener('click', function() {
         confirmationDialog.classList.remove('active');
         pendingSubmitData = null;
         isSubmitting = false;
@@ -1589,100 +1690,120 @@
         setTimeout(clearStatus, 3000);
     });
 
-    // ===================== FETCH DENGAN TIMEOUT =====================
-    async function fetchWithTimeout(url, options, timeout = FETCH_TIMEOUT) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeout);
-        try {
-            const response = await fetch(url, { ...options, signal: controller.signal });
-            return response;
-        } finally {
-            clearTimeout(timeoutId);
-        }
+    // ===================== FETCH DENGAN TIMEOUT (KOMPATIBEL LAMA) =====================
+    function fetchWithTimeout(url, options, timeout) {
+        timeout = timeout || FETCH_TIMEOUT;
+        return new Promise(function(resolve, reject) {
+            var controller;
+            var timeoutId;
+            
+            if (typeof AbortController !== 'undefined') {
+                controller = new AbortController();
+                timeoutId = setTimeout(function() {
+                    controller.abort();
+                }, timeout);
+            } else {
+                // Fallback untuk browser lama
+                timeoutId = setTimeout(function() {
+                    reject(new Error('timeout'));
+                }, timeout);
+            }
+            
+            var fetchOptions = options || {};
+            if (controller) {
+                fetchOptions.signal = controller.signal;
+            }
+            
+            fetch(url, fetchOptions).then(function(response) {
+                clearTimeout(timeoutId);
+                resolve(response);
+            }).catch(function(error) {
+                clearTimeout(timeoutId);
+                reject(error);
+            });
+        });
     }
 
     // ===================== TES KONEKSI SERVER (HEALTH CHECK) =====================
-    async function testConnection() {
-        try {
-            setSyncStatus('syncing');
-            const response = await fetchWithTimeout(`${API_URL}?action=health`, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json' },
-                mode: 'cors'
-            }, 8000);
-            
-            const text = await response.text();
-            let result;
+    function testConnection() {
+        setSyncStatus('syncing');
+        fetchWithTimeout(API_URL + '?action=health', {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            mode: 'cors'
+        }, 10000).then(function(response) {
+            return response.text();
+        }).then(function(text) {
+            var result;
             try {
                 result = JSON.parse(text);
-            } catch {
+            } catch (e) {
                 setSyncStatus('error');
-                return false;
+                return;
             }
             
             if (result && result.success) {
                 setSyncStatus('synced');
-                return true;
             } else {
                 setSyncStatus('error');
-                return false;
             }
-        } catch (error) {
+        }).catch(function(error) {
             console.error('Connection test failed:', error);
             setSyncStatus('error');
-            return false;
-        }
+        });
     }
 
     // ===================== SUBMIT KE SERVER =====================
-    async function submitToServer(payload, retryCount = 0) {
+    function submitToServer(payload, retryCount) {
+        retryCount = retryCount || 0;
         setLoading(true);
         clearStatus();
         setSyncStatus('syncing');
 
-        try {
-            const submissionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            const clientId = getClientId();
-            
-            const dataWithSheet = {
-                ...payload,
-                sheetName: SHEET_NAME,
-                submissionId: submissionId,
-                clientId: clientId
-            };
-            
-            const encodedData = encodeBase64(dataWithSheet);
-            
-            const requestBody = { data: encodedData };
-            if (API_KEY) requestBody.apiKey = API_KEY;
-            
-            const response = await fetchWithTimeout(API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'text/plain;charset=utf-8',
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(requestBody),
-                mode: 'cors',
-                cache: 'no-store'
-            });
-
-            const responseText = await response.text();
-            
-            let result;
+        var submissionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        var clientId = getClientId();
+        
+        var dataWithSheet = {};
+        for (var key in payload) {
+            if (payload.hasOwnProperty(key)) {
+                dataWithSheet[key] = payload[key];
+            }
+        }
+        dataWithSheet.sheetName = SHEET_NAME;
+        dataWithSheet.submissionId = submissionId;
+        dataWithSheet.clientId = clientId;
+        
+        var encodedData = encodeBase64(dataWithSheet);
+        
+        var requestBody = { data: encodedData };
+        if (API_KEY) requestBody.apiKey = API_KEY;
+        
+        fetchWithTimeout(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain;charset=utf-8',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(requestBody),
+            mode: 'cors',
+            cache: 'no-store'
+        }, FETCH_TIMEOUT).then(function(response) {
+            return response.text();
+        }).then(function(responseText) {
+            var result;
             try {
                 result = JSON.parse(responseText);
             } catch (jsonError) {
                 console.error('Invalid JSON response:', responseText);
                 throw new Error('Server mengembalikan respons yang tidak valid.');
             }
-
+            
             if (!response.ok) {
                 throw new Error('HTTP ' + response.status + ': ' + (result.message || response.statusText));
             }
-
+            
             if (result.success) {
-                let certMsg = '';
+                var certMsg = '';
                 if (result.certificate && result.certificate.success) {
                     certMsg = ' ✅ Sertifikat berhasil dikirim ke email.';
                 } else if (result.certificate && !result.certificate.success) {
@@ -1690,14 +1811,14 @@
                 } else {
                     certMsg = ' ✅ Data tersimpan.';
                 }
-                showStatus('success', `✅ Absen berhasil dikirim!${certMsg}`);
+                showStatus('success', '✅ Absen berhasil dikirim!' + certMsg);
                 setSyncStatus('synced');
                 popupSuccess.style.display = 'block';
                 form.reset();
                 clearDraft();
                 isSubmitting = false;
-
-                setTimeout(() => {
+                
+                setTimeout(function() {
                     popupSuccess.style.display = 'none';
                     splashScreen.classList.remove('splash-hidden');
                     splashScreen.focus();
@@ -1717,35 +1838,38 @@
                 setSyncStatus('error');
                 isSubmitting = false;
             }
-        } catch (error) {
+            setLoading(false);
+        }).catch(function(error) {
             console.error('Submit error:', error);
             
-            if (error.name === 'AbortError') {
+            if (error.name === 'AbortError' || error.message === 'timeout') {
                 showStatus('error', '⏱️ Waktu koneksi habis. Periksa koneksi internet Anda.');
                 setSyncStatus('error');
                 isSubmitting = false;
+                setLoading(false);
                 return;
             }
-
+            
             if (error instanceof TypeError) {
                 showStatus('error', '🌐 Gagal terhubung ke server. Kemungkinan masalah CORS atau jaringan.');
                 setSyncStatus('error');
                 isSubmitting = false;
+                setLoading(false);
                 return;
             }
-
+            
             if (retryCount < MAX_RETRIES) {
-                showStatus('warning', `🔄 Gagal terhubung. Mencoba ulang (${retryCount + 1}/${MAX_RETRIES})...`);
-                await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (retryCount + 1)));
-                return submitToServer(payload, retryCount + 1);
+                showStatus('warning', '🔄 Gagal terhubung. Mencoba ulang (' + (retryCount + 1) + '/' + MAX_RETRIES + ')...');
+                setTimeout(function() {
+                    submitToServer(payload, retryCount + 1);
+                }, RETRY_DELAY * (retryCount + 1));
             } else {
                 showStatus('error', '❌ Gagal terhubung ke server. Periksa koneksi internet Anda.');
+                setSyncStatus('error');
+                isSubmitting = false;
+                setLoading(false);
             }
-            setSyncStatus('error');
-            isSubmitting = false;
-        } finally {
-            setLoading(false);
-        }
+        });
     }
 
     // ===================== SUBMIT FORM =====================
@@ -1762,17 +1886,16 @@
             return;
         }
 
-        const honeypot = document.getElementById('website').value;
+        var honeypot = document.getElementById('website').value;
         if (honeypot) {
             showStatus('error', '❌ Spam terdeteksi. Form tidak bisa diproses.');
             return;
         }
 
-        // Validasi peran dengan ketat
-        const peran = getSelectedRadioValue('peran');
-        const validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        var peran = getSelectedRadioValue('peran');
+        var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
         
-        if (!peran || !validPeran.includes(peran)) {
+        if (!peran || validPeran.indexOf(peran) === -1) {
             showFieldError('peran', '❌ Pilih peran yang valid: Narasumber, Panitia, atau Peserta');
             showStatus('error', '❌ Peran tidak valid. Silakan pilih Narasumber, Panitia, atau Peserta.');
             return;
@@ -1780,11 +1903,10 @@
             clearFieldError('peran');
         }
 
-        // Validasi kehadiran dengan ketat
-        const kehadiran = getSelectedRadioValue('kehadiran');
-        const validKehadiran = ['Offline', 'Online'];
+        var kehadiran = getSelectedRadioValue('kehadiran');
+        var validKehadiran = ['Offline', 'Online'];
         
-        if (!kehadiran || !validKehadiran.includes(kehadiran)) {
+        if (!kehadiran || validKehadiran.indexOf(kehadiran) === -1) {
             showFieldError('kehadiran', '❌ Pilih kehadiran yang valid: Offline atau Online');
             showStatus('error', '❌ Kehadiran tidak valid. Silakan pilih Offline atau Online.');
             return;
@@ -1792,12 +1914,12 @@
             clearFieldError('kehadiran');
         }
 
-        const nama = document.getElementById('nama').value.trim();
-        const email = document.getElementById('email').value.trim().toLowerCase();
-        const whatsappInput = document.getElementById('whatsapp').value.trim();
-        const whatsapp = normalizeWhatsApp(whatsappInput);
+        var nama = document.getElementById('nama').value.trim();
+        var email = document.getElementById('email').value.trim().toLowerCase();
+        var whatsappInput = document.getElementById('whatsapp').value.trim();
+        var whatsapp = normalizeWhatsApp(whatsappInput);
 
-        let isValid = true;
+        var isValid = true;
 
         if (!nama || nama.length < 2) {
             showFieldError('nama', 'Nama minimal 2 karakter');
@@ -1828,12 +1950,12 @@
         isSubmitting = true;
         saveDraft();
 
-        const payload = {
-            peran,
-            nama,
-            email,
-            whatsapp,
-            kehadiran,
+        var payload = {
+            peran: peran,
+            nama: nama,
+            email: email,
+            whatsapp: whatsapp,
+            kehadiran: kehadiran,
             semester: 'Genap 2025/2026',
             periode: 'Februari 2026 - Agustus 2027',
             tanggalPelaksanaan: CONFIG_WAKTU.tanggal,
@@ -1845,9 +1967,9 @@
     });
 
     // ===================== INISIALISASI =====================
-    window.addEventListener('DOMContentLoaded', () => {
+    function init() {
         displayTanggal.textContent = formatTanggalDisplay(CONFIG_WAKTU.tanggal);
-        displayWaktu.textContent = `${CONFIG_WAKTU.mulai} - ${CONFIG_WAKTU.selesai} WIB`;
+        displayWaktu.textContent = CONFIG_WAKTU.mulai + ' - ' + CONFIG_WAKTU.selesai + ' WIB';
         
         loadDraft();
         splashScreen.focus();
@@ -1855,14 +1977,16 @@
         checkFormAccess();
         
         // Tes koneksi ke server
-        testConnection().then(isConnected => {
-            if (!isConnected) {
-                showStatus('error', '⚠️ Tidak dapat terhubung ke server. Periksa kembali URL Web App atau koneksi internet.');
-            }
-        });
-    });
+        testConnection();
+    }
 
-    document.addEventListener('keydown', (e) => {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && !splashScreen.classList.contains('splash-hidden')) {
             splashScreen.classList.add('splash-hidden');
             checkFormAccess();
