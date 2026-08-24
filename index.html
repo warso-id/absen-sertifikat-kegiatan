@@ -338,8 +338,7 @@
 
         input[type="text"], 
         input[type="email"], 
-        input[type="tel"],
-        select {
+        input[type="tel"] {
             width: 100%;
             padding: 16px 18px;
             background: #0b1f17;
@@ -355,46 +354,91 @@
             appearance: none;
             min-height: 52px;
         }
-        input:focus,
-        select:focus {
+        input:focus {
             border-color: #4ade80;
             box-shadow: 0 0 0 5px rgba(74,222,128,0.2);
             background: #0f2a1d;
         }
-        input:focus-visible,
-        select:focus-visible {
+        input:focus-visible {
             outline: 2px solid #4ade80;
             outline-offset: 2px;
         }
         input::placeholder {
             color: #6b8f7c;
         }
-        input[aria-invalid="true"],
-        select[aria-invalid="true"] {
+        input[aria-invalid="true"] {
             border-color: #f87171;
             box-shadow: 0 0 0 5px rgba(248,113,113,0.2);
         }
-        input[aria-invalid="false"],
-        select[aria-invalid="false"] {
+        input[aria-invalid="false"] {
             border-color: #4ade80;
         }
-        input:disabled,
-        select:disabled {
+        input:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             background: #0a1a12;
         }
 
-        select {
-            cursor: pointer;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 16px center;
-            padding-right: 40px;
+        /* RADIO BUTTON STYLES */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 4px;
         }
-        select option {
+        .radio-option {
+            position: relative;
+            flex: 1;
+            min-width: 120px;
+        }
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+            margin: 0;
+        }
+        .radio-option input[type="radio"]:disabled {
+            cursor: not-allowed;
+        }
+        .radio-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 16px;
             background: #0b1f17;
-            color: #f0fdf4;
+            border: 2px solid #2d6a4f;
+            border-radius: 16px;
+            color: #d1fae5;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: center;
+            user-select: none;
+            -webkit-user-select: none;
+            min-height: 50px;
+        }
+        .radio-option input[type="radio"]:checked + .radio-label {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.15);
+            color: #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+            transform: scale(1.02);
+        }
+        .radio-option input[type="radio"]:focus-visible + .radio-label {
+            outline: 3px solid #4ade80;
+            outline-offset: 2px;
+        }
+        .radio-option input[type="radio"]:disabled + .radio-label {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .radio-icon {
+            font-size: 18px;
         }
 
         .field-hint {
@@ -759,8 +803,7 @@
         @media (max-width: 768px) {
             input[type="text"],
             input[type="email"],
-            input[type="tel"],
-            select {
+            input[type="tel"] {
                 font-size: 16px !important;
             }
         }
@@ -779,11 +822,21 @@
             .lock-modal-content {
                 padding: 25px 20px;
             }
+            .radio-option {
+                min-width: 100px;
+            }
         }
 
         @media (max-width: 350px) {
             .card { padding: 16px 12px; }
             .title { font-size: 20px; }
+            .radio-option {
+                min-width: 80px;
+            }
+            .radio-label {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -817,7 +870,7 @@
             <div class="countdown-timer" id="countdownTimer">00:00:00</div>
         </div>
         <div class="countdown-info" id="lockModalInfo">
-            📅 Tanggal: 22 Agustus 2026<br>
+            📅 Tanggal: 27 Agustus 2026<br>
             ⏰ Waktu: 09:00 - 16:00 WIB
         </div>
         <button class="lock-close-btn" id="lockCloseBtn">Tutup</button>
@@ -847,7 +900,7 @@
                 <div class="logo-fallback">🎓</div>
             </div>
             <h1 class="title">📝 Form Sertifikat Kegiatan</h1>
-            <div class="subtitle">Pelatihan Analisis Data Kuantitatif • 27 Agustus 2026</div>
+            <div class="subtitle">Pelatihan Analisis Data Kuantitatif SEM SmartPLS • 27 Agustus 2026</div>
         </div>
 
         <!-- Live Sync Indicator -->
@@ -874,15 +927,29 @@
             <!-- Honeypot anti-spam -->
             <input type="text" id="website" name="website" style="display:none;" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-            <!-- 0. PERAN (NARASUMBER / PANITIA / PESERTA) -->
+            <!-- 0. PERAN (RADIO BUTTON) -->
             <div class="form-group">
-                <label class="form-label" for="peran">Peran dalam Kegiatan <span class="required">*</span></label>
-                <select id="peran" name="peran" required aria-required="true" disabled>
-                    <option value="">-- Pilih Peran --</option>
-                    <option value="Narasumber">Narasumber</option>
-                    <option value="Panitia">Panitia</option>
-                    <option value="Peserta">Peserta</option>
-                </select>
+                <label class="form-label">Peran dalam Kegiatan <span class="required">*</span></label>
+                <div class="radio-group" id="peranRadioGroup">
+                    <div class="radio-option">
+                        <input type="radio" id="peranNarasumber" name="peran" value="Narasumber" required aria-required="true" disabled>
+                        <label for="peranNarasumber" class="radio-label">
+                            <span class="radio-icon">🎤</span> Narasumber
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="peranPanitia" name="peran" value="Panitia" required aria-required="true" disabled>
+                        <label for="peranPanitia" class="radio-label">
+                            <span class="radio-icon">🛠️</span> Panitia
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="peranPeserta" name="peran" value="Peserta" required aria-required="true" disabled>
+                        <label for="peranPeserta" class="radio-label">
+                            <span class="radio-icon">👥</span> Peserta
+                        </label>
+                    </div>
+                </div>
                 <div class="field-error" id="peranError" aria-live="polite"></div>
             </div>
 
@@ -907,6 +974,26 @@
                 <div class="field-error" id="whatsappError" aria-live="polite"></div>
             </div>
 
+            <!-- 4. KEHADIRAN (RADIO BUTTON) -->
+            <div class="form-group">
+                <label class="form-label">Kehadiran <span class="required">*</span></label>
+                <div class="radio-group" id="kehadiranRadioGroup">
+                    <div class="radio-option">
+                        <input type="radio" id="kehadiranOffline" name="kehadiran" value="Offline" required aria-required="true" disabled>
+                        <label for="kehadiranOffline" class="radio-label">
+                            <span class="radio-icon">🏛️</span> Offline
+                        </label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="kehadiranOnline" name="kehadiran" value="Online" required aria-required="true" disabled>
+                        <label for="kehadiranOnline" class="radio-label">
+                            <span class="radio-icon">💻</span> Online
+                        </label>
+                    </div>
+                </div>
+                <div class="field-error" id="kehadiranError" aria-live="polite"></div>
+            </div>
+
             <button type="submit" id="submitButton" class="submit-button" aria-label="Kirim absen kegiatan" disabled>🔒 Form Terkunci</button>
             <div id="status" class="status" role="alert" aria-live="assertive"></div>
         </form>
@@ -918,7 +1005,7 @@
     // ===================== KONFIGURASI =====================
     const API_URL = 'TEMPEL_DISINI';
     const FETCH_TIMEOUT = 15000; // 15 detik
-    const SHEET_NAME = 'Pelatihan Analisis Data Kuantitatif';
+    const SHEET_NAME = 'Pelatihan SEM SmartPLS';
     const MAX_RETRIES = 3;
     const RETRY_DELAY = 2000;
     const API_KEY = ''; // isi jika backend membutuhkan API key
@@ -1208,15 +1295,53 @@
     // ===================== AUTO-SAVE DRAFT =====================
     const saveDraft = debounce(() => {
         const draft = {
-            peran: document.getElementById('peran').value,
+            peran: getSelectedPeran(),
             nama: document.getElementById('nama').value,
             email: document.getElementById('email').value,
             whatsapp: document.getElementById('whatsapp').value,
+            kehadiran: getSelectedKehadiran(),
             timestamp: Date.now()
         };
         localStorage.setItem('formDraft', JSON.stringify(draft));
         setSyncStatus('synced');
     }, 500);
+
+    // ===================== GET SELECTED RADIO =====================
+    function getSelectedPeran() {
+        const radios = document.getElementsByName('peran');
+        for (const radio of radios) {
+            if (radio.checked) return radio.value;
+        }
+        return '';
+    }
+
+    function getSelectedKehadiran() {
+        const radios = document.getElementsByName('kehadiran');
+        for (const radio of radios) {
+            if (radio.checked) return radio.value;
+        }
+        return '';
+    }
+
+    function setSelectedPeran(value) {
+        const radios = document.getElementsByName('peran');
+        for (const radio of radios) {
+            if (radio.value === value) {
+                radio.checked = true;
+                break;
+            }
+        }
+    }
+
+    function setSelectedKehadiran(value) {
+        const radios = document.getElementsByName('kehadiran');
+        for (const radio of radios) {
+            if (radio.value === value) {
+                radio.checked = true;
+                break;
+            }
+        }
+    }
 
     // ===================== LOAD DRAFT =====================
     function loadDraft() {
@@ -1225,10 +1350,11 @@
             try {
                 const data = JSON.parse(draft);
                 if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-                    document.getElementById('peran').value = data.peran || '';
+                    setSelectedPeran(data.peran || '');
                     document.getElementById('nama').value = data.nama || '';
                     document.getElementById('email').value = data.email || '';
                     document.getElementById('whatsapp').value = data.whatsapp || '';
+                    setSelectedKehadiran(data.kehadiran || '');
                 }
             } catch (e) {
                 console.error('Error loading draft:', e);
@@ -1247,13 +1373,6 @@
         if (!field || field.disabled) return;
         
         switch(fieldId) {
-            case 'peran':
-                if (field.value === '') {
-                    showFieldError('peran', 'Silakan pilih peran Anda');
-                } else {
-                    clearFieldError('peran');
-                }
-                break;
             case 'nama':
                 if (field.value.trim().length > 0 && field.value.trim().length < 2) {
                     showFieldError('nama', 'Nama minimal 2 karakter');
@@ -1278,19 +1397,28 @@
         }
     }, 300);
 
+    // ===================== VALIDASI RADIO REAL-TIME =====================
+    function validateRadioRealTime(groupName, errorFieldId, errorMessage) {
+        const radios = document.getElementsByName(groupName);
+        let selected = false;
+        for (const radio of radios) {
+            if (radio.checked) {
+                selected = true;
+                break;
+            }
+        }
+        if (!selected) {
+            showFieldError(errorFieldId, errorMessage);
+        } else {
+            clearFieldError(errorFieldId);
+        }
+    }
+
     // ===================== EVENT LISTENERS =====================
-    ['peran', 'nama', 'email', 'whatsapp'].forEach(fieldId => {
+    ['nama', 'email', 'whatsapp'].forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
             field.addEventListener('input', () => {
-                if (!field.disabled) {
-                    validateFieldRealTime(fieldId);
-                    saveDraft();
-                    setSyncStatus('syncing');
-                    setTimeout(() => setSyncStatus('synced'), 300);
-                }
-            });
-            field.addEventListener('change', () => {
                 if (!field.disabled) {
                     validateFieldRealTime(fieldId);
                     saveDraft();
@@ -1306,6 +1434,30 @@
         }
     });
 
+    // Event listener untuk radio button peran
+    document.getElementsByName('peran').forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (!radio.disabled) {
+                validateRadioRealTime('peran', 'peran', 'Silakan pilih peran Anda');
+                saveDraft();
+                setSyncStatus('syncing');
+                setTimeout(() => setSyncStatus('synced'), 300);
+            }
+        });
+    });
+
+    // Event listener untuk radio button kehadiran
+    document.getElementsByName('kehadiran').forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (!radio.disabled) {
+                validateRadioRealTime('kehadiran', 'kehadiran', 'Silakan pilih kehadiran Anda');
+                saveDraft();
+                setSyncStatus('syncing');
+                setTimeout(() => setSyncStatus('synced'), 300);
+            }
+        });
+    });
+
     // ===================== KONFIRMASI DIALOG =====================
     let pendingSubmitData = null;
 
@@ -1315,7 +1467,8 @@
             <strong>👤 Peran:</strong> ${data.peran}<br>
             <strong>👤 Nama:</strong> ${data.nama}<br>
             <strong>📧 Email:</strong> ${data.email}<br>
-            <strong>📱 WhatsApp:</strong> ${data.whatsapp}
+            <strong>📱 WhatsApp:</strong> ${data.whatsapp}<br>
+            <strong>📍 Kehadiran:</strong> ${data.kehadiran}
         `;
         confirmationData.innerHTML = confirmationHTML;
         confirmationDialog.classList.add('active');
@@ -1516,11 +1669,12 @@
             return;
         }
 
-        const peran = document.getElementById('peran').value;
+        const peran = getSelectedPeran();
         const nama = document.getElementById('nama').value.trim();
         const email = document.getElementById('email').value.trim().toLowerCase();
         const whatsappInput = document.getElementById('whatsapp').value.trim();
         const whatsapp = normalizeWhatsApp(whatsappInput);
+        const kehadiran = getSelectedKehadiran();
 
         let isValid = true;
 
@@ -1552,6 +1706,13 @@
             clearFieldError('whatsapp');
         }
 
+        if (!kehadiran) {
+            showFieldError('kehadiran', 'Silakan pilih kehadiran Anda');
+            isValid = false;
+        } else {
+            clearFieldError('kehadiran');
+        }
+
         if (!isValid) {
             showStatus('error', '❌ Periksa kembali field yang ditandai merah.');
             return;
@@ -1565,6 +1726,7 @@
             nama,
             email,
             whatsapp,
+            kehadiran,
             semester: 'Genap 2025/2026',
             periode: 'Februari 2026 - Agustus 2027',
             tanggalPelaksanaan: CONFIG_WAKTU.tanggal,
