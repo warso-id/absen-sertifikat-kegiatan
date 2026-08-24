@@ -1114,21 +1114,22 @@
 <script>
     // ===================== KONFIGURASI =====================
     var API_URL = 'https://script.google.com/macros/s/AKfycbwVbaaj7XhoH0PBO97NQl1K3anQI8r5C01JAa3eaBqDF1tJEvAM6D9ZP8Qx548eUxI0dA/exec';
-    var FETCH_TIMEOUT = 30000; // 30 detik (ditingkatkan untuk kompatibilitas)
+    var FETCH_TIMEOUT = 60000; // 60 detik (ditingkatkan untuk sertifikat)
     var SHEET_NAME = 'Pelatihan SEM SmartPLS';
-    var MAX_RETRIES = 3;
-    var RETRY_DELAY = 2000;
-    var API_KEY = ''; // isi jika backend membutuhkan API key
+    var MAX_RETRIES = 1; // Dikurangi dari 3 menjadi 1 untuk hindari rate limit
+    var RETRY_DELAY = 5000; // 5 detik
+    var API_KEY = '';
 
     // ===================== KONFIGURASI WAKTU (HARDCODED) =====================
     var CONFIG_WAKTU = {
-        tanggal: '2026-08-24',    // Format: YYYY-MM-DD
-        mulai: '09:00',            // Format: HH:MM (24 jam)
-        selesai: '59:00'           // Format: HH:MM (24 jam)
+        tanggal: '2026-08-24',
+        mulai: '09:00',
+        selesai: '59:00'
     };
 
     // ===================== STATE MANAGEMENT =====================
     var isSubmitting = false;
+    var submitAttempts = 0;
 
     // ===================== ELEMEN =====================
     var form = document.getElementById('registrationForm');
@@ -1157,22 +1158,15 @@
     // ===================== FORMAT TANGGAL UNTUK DISPLAY =====================
     function formatTanggalDisplay(tanggalStr) {
         var parts = tanggalStr.split('-');
-        var year = parts[0];
-        var month = parts[1];
-        var day = parts[2];
         var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        return parseInt(day) + ' ' + months[parseInt(month) - 1] + ' ' + year;
+        return parseInt(parts[2]) + ' ' + months[parseInt(parts[1]) - 1] + ' ' + parts[0];
     }
 
     // ===================== FUNGSI CEK WAKTU FORM =====================
     function checkFormAccess() {
-        var tanggal = CONFIG_WAKTU.tanggal;
-        var mulai = CONFIG_WAKTU.mulai;
-        var selesai = CONFIG_WAKTU.selesai;
-        
         var now = new Date();
-        var startDateTime = new Date(tanggal + 'T' + mulai + ':00');
-        var endDateTime = new Date(tanggal + 'T' + selesai + ':00');
+        var startDateTime = new Date(CONFIG_WAKTU.tanggal + 'T' + CONFIG_WAKTU.mulai + ':00');
+        var endDateTime = new Date(CONFIG_WAKTU.tanggal + 'T' + CONFIG_WAKTU.selesai + ':00');
         
         if (now < startDateTime) {
             var timeDiff = startDateTime - now;
@@ -1250,14 +1244,15 @@
             var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((diff % (1000 * 60)) / 1000);
             
-            countdownTimer.textContent = 
-                String(hours).padStart(2, '0') + ':' +
-                String(minutes).padStart(2, '0') + ':' +
-                String(seconds).padStart(2, '0');
+            countdownTimer.textContent = padZero(hours) + ':' + padZero(minutes) + ':' + padZero(seconds);
         }
         
         updateCountdown();
         countdownInterval = setInterval(updateCountdown, 1000);
+    }
+
+    function padZero(num) {
+        return (num < 10 ? '0' : '') + num;
     }
 
     function stopCountdown() {
@@ -1283,18 +1278,11 @@
         }
     });
 
-    // ===================== BASE64 =====================
+    // ===================== BASE64 (KOMPATIBEL LAMA) =====================
     function encodeBase64(data) {
         var json = JSON.stringify(data);
-        var bytes = [];
-        for (var i = 0; i < json.length; i++) {
-            bytes.push(json.charCodeAt(i));
-        }
-        var binary = '';
-        for (var j = 0; j < bytes.length; j++) {
-            binary += String.fromCharCode(bytes[j]);
-        }
-        return btoa(binary);
+        var utf8 = unescape(encodeURIComponent(json));
+        return btoa(utf8);
     }
 
     // ===================== NORMALISASI WHATSAPP =====================
@@ -1308,12 +1296,11 @@
         return phone;
     }
 
-    // ===================== VALIDASI EMAIL =====================
+    // ===================== VALIDASI =====================
     function isValidEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    // ===================== VALIDASI WHATSAPP =====================
     function isValidWhatsApp(number) {
         var phone = normalizeWhatsApp(number);
         return /^628\d{7,13}$/.test(phone);
@@ -1322,11 +1309,12 @@
     // ===================== DEBOUNCE =====================
     function debounce(func, wait) {
         var timeout;
-        return function executedFunction() {
+        return function() {
+            var context = this;
             var args = arguments;
             var later = function() {
-                clearTimeout(timeout);
-                func.apply(null, args);
+                timeout = null;
+                func.apply(context, args);
             };
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
@@ -1337,7 +1325,6 @@
     function showStatus(type, message) {
         statusBox.className = 'status show ' + type;
         statusBox.textContent = message;
-        statusBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     function clearStatus() {
@@ -1347,23 +1334,18 @@
 
     // ===================== LIVE SYNC INDICATOR =====================
     function setSyncStatus(status) {
-        switch(status) {
-            case 'syncing':
-                syncDot.className = 'sync-dot syncing';
-                syncText.textContent = '🟡 Menyinkronkan data...';
-                break;
-            case 'synced':
-                syncDot.className = 'sync-dot synced';
-                syncText.textContent = '🟢 Live sync ke Google Spreadsheet';
-                break;
-            case 'error':
-                syncDot.className = 'sync-dot error';
-                syncText.textContent = '🔴 Gagal sinkronisasi';
-                break;
-            case 'saving':
-                syncDot.className = 'sync-dot syncing';
-                syncText.textContent = '🟡 Menyimpan data...';
-                break;
+        if (status === 'syncing') {
+            syncDot.className = 'sync-dot syncing';
+            syncText.textContent = '🟡 Menyinkronkan data...';
+        } else if (status === 'synced') {
+            syncDot.className = 'sync-dot synced';
+            syncText.textContent = '🟢 Live sync ke Google Spreadsheet';
+        } else if (status === 'error') {
+            syncDot.className = 'sync-dot error';
+            syncText.textContent = '🔴 Gagal sinkronisasi';
+        } else if (status === 'saving') {
+            syncDot.className = 'sync-dot syncing';
+            syncText.textContent = '🟡 Menyimpan data...';
         }
     }
 
@@ -1374,9 +1356,6 @@
             errorElement.textContent = message;
             errorElement.classList.add('show');
         }
-        var input = document.getElementById(fieldId);
-        if (input) input.setAttribute('aria-invalid', 'true');
-        
         if (fieldId === 'peran') {
             document.getElementById('peranRadioGroup').classList.add('error');
         }
@@ -1391,9 +1370,6 @@
             errorElement.textContent = '';
             errorElement.classList.remove('show');
         }
-        var input = document.getElementById(fieldId);
-        if (input) input.setAttribute('aria-invalid', 'false');
-        
         if (fieldId === 'peran') {
             document.getElementById('peranRadioGroup').classList.remove('error');
         }
@@ -1424,41 +1400,9 @@
         return clientId;
     }
 
-    // ===================== VALIDASI RADIO BUTTON =====================
-    function validateRadioGroup(groupName, errorFieldId, errorMessage) {
-        var radios = document.getElementsByName(groupName);
-        var selectedValue = '';
-        var isValid = false;
-        
-        for (var i = 0; i < radios.length; i++) {
-            if (radios[i].checked) {
-                selectedValue = radios[i].value;
-                isValid = true;
-                break;
-            }
-        }
-        
-        var validValues = {
-            'peran': ['Narasumber', 'Panitia', 'Peserta'],
-            'kehadiran': ['Offline', 'Online']
-        };
-        
-        if (isValid && validValues[groupName] && validValues[groupName].indexOf(selectedValue) === -1) {
-            isValid = false;
-            showFieldError(errorFieldId, 'Nilai ' + groupName + ' tidak valid');
-        } else if (!isValid) {
-            showFieldError(errorFieldId, errorMessage);
-        } else {
-            clearFieldError(errorFieldId);
-        }
-        
-        return isValid ? selectedValue : '';
-    }
-
-    // ===================== GET SELECTED RADIO (DENGAN VALIDASI) =====================
+    // ===================== GET SELECTED RADIO =====================
     function getSelectedRadioValue(groupName) {
         var radios = document.getElementsByName(groupName);
-        
         var validValues = {
             'peran': ['Narasumber', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
@@ -1476,7 +1420,6 @@
         return '';
     }
 
-    // ===================== SET SELECTED RADIO (DENGAN VALIDASI) =====================
     function setSelectedRadioValue(groupName, value) {
         var radios = document.getElementsByName(groupName);
         var validValues = {
@@ -1485,7 +1428,6 @@
         };
         
         if (validValues[groupName] && validValues[groupName].indexOf(value) === -1) {
-            console.error('Nilai "' + value + '" tidak valid untuk ' + groupName);
             return false;
         }
         
@@ -1498,7 +1440,7 @@
         return false;
     }
 
-    // ===================== VALIDASI PERAN REAL-TIME =====================
+    // ===================== VALIDASI RADIO REAL-TIME =====================
     function validatePeranRealTime() {
         var selectedPeran = getSelectedRadioValue('peran');
         var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
@@ -1507,7 +1449,7 @@
             showFieldError('peran', '⚠️ Silakan pilih salah satu: Narasumber, Panitia, atau Peserta');
             return false;
         } else if (validPeran.indexOf(selectedPeran) === -1) {
-            showFieldError('peran', '❌ Nilai peran tidak valid. Pilih Narasumber, Panitia, atau Peserta');
+            showFieldError('peran', '❌ Nilai peran tidak valid.');
             return false;
         } else {
             clearFieldError('peran');
@@ -1515,7 +1457,6 @@
         }
     }
 
-    // ===================== VALIDASI KEHADIRAN REAL-TIME =====================
     function validateKehadiranRealTime() {
         var selectedKehadiran = getSelectedRadioValue('kehadiran');
         var validKehadiran = ['Offline', 'Online'];
@@ -1524,7 +1465,7 @@
             showFieldError('kehadiran', '⚠️ Silakan pilih salah satu: Offline atau Online');
             return false;
         } else if (validKehadiran.indexOf(selectedKehadiran) === -1) {
-            showFieldError('kehadiran', '❌ Nilai kehadiran tidak valid. Pilih Offline atau Online');
+            showFieldError('kehadiran', '❌ Nilai kehadiran tidak valid.');
             return false;
         } else {
             clearFieldError('kehadiran');
@@ -1565,7 +1506,6 @@
         }
     }
 
-    // ===================== CLEAR DRAFT =====================
     function clearDraft() {
         localStorage.removeItem('formDraft');
     }
@@ -1575,28 +1515,24 @@
         var field = document.getElementById(fieldId);
         if (!field || field.disabled) return;
         
-        switch(fieldId) {
-            case 'nama':
-                if (field.value.trim().length > 0 && field.value.trim().length < 2) {
-                    showFieldError('nama', 'Nama minimal 2 karakter');
-                } else {
-                    clearFieldError('nama');
-                }
-                break;
-            case 'email':
-                if (field.value.trim() && !isValidEmail(field.value.trim())) {
-                    showFieldError('email', 'Format email tidak valid');
-                } else {
-                    clearFieldError('email');
-                }
-                break;
-            case 'whatsapp':
-                if (field.value.trim() && !isValidWhatsApp(field.value.trim())) {
-                    showFieldError('whatsapp', 'Nomor WhatsApp tidak valid');
-                } else {
-                    clearFieldError('whatsapp');
-                }
-                break;
+        if (fieldId === 'nama') {
+            if (field.value.trim().length > 0 && field.value.trim().length < 2) {
+                showFieldError('nama', 'Nama minimal 2 karakter');
+            } else {
+                clearFieldError('nama');
+            }
+        } else if (fieldId === 'email') {
+            if (field.value.trim() && !isValidEmail(field.value.trim())) {
+                showFieldError('email', 'Format email tidak valid');
+            } else {
+                clearFieldError('email');
+            }
+        } else if (fieldId === 'whatsapp') {
+            if (field.value.trim() && !isValidWhatsApp(field.value.trim())) {
+                showFieldError('whatsapp', 'Nomor WhatsApp tidak valid');
+            } else {
+                clearFieldError('whatsapp');
+            }
         }
     }, 300);
 
@@ -1610,51 +1546,28 @@
                     if (!field.disabled) {
                         validateFieldRealTime(fieldId);
                         saveDraft();
-                        setSyncStatus('syncing');
-                        setTimeout(function() { setSyncStatus('synced'); }, 300);
-                    }
-                });
-                field.addEventListener('blur', function() {
-                    if (!field.disabled) {
-                        validateFieldRealTime(fieldId);
                     }
                 });
             }
         })(textFields[i]);
     }
 
-    // Event listener untuk radio button peran
     var peranRadios = document.getElementsByName('peran');
     for (var j = 0; j < peranRadios.length; j++) {
         peranRadios[j].addEventListener('change', function() {
             if (!this.disabled) {
-                var isValid = validatePeranRealTime();
-                if (isValid) {
-                    console.log('✅ Peran valid:', this.value);
-                } else {
-                    console.log('❌ Peran tidak valid');
-                }
+                validatePeranRealTime();
                 saveDraft();
-                setSyncStatus('syncing');
-                setTimeout(function() { setSyncStatus('synced'); }, 300);
             }
         });
     }
 
-    // Event listener untuk radio button kehadiran
     var kehadiranRadios = document.getElementsByName('kehadiran');
     for (var k = 0; k < kehadiranRadios.length; k++) {
         kehadiranRadios[k].addEventListener('change', function() {
             if (!this.disabled) {
-                var isValid = validateKehadiranRealTime();
-                if (isValid) {
-                    console.log('✅ Kehadiran valid:', this.value);
-                } else {
-                    console.log('❌ Kehadiran tidak valid');
-                }
+                validateKehadiranRealTime();
                 saveDraft();
-                setSyncStatus('syncing');
-                setTimeout(function() { setSyncStatus('synced'); }, 300);
             }
         });
     }
@@ -1678,7 +1591,7 @@
         if (pendingSubmitData) {
             var dataToSubmit = pendingSubmitData;
             pendingSubmitData = null;
-            submitToServer(dataToSubmit);
+            submitToServer(dataToSubmit, 0);
         }
     });
 
@@ -1686,24 +1599,24 @@
         confirmationDialog.classList.remove('active');
         pendingSubmitData = null;
         isSubmitting = false;
-        showStatus('info', 'ℹ️ Pengiriman dibatalkan. Anda bisa periksa kembali data.');
+        showStatus('info', 'ℹ️ Pengiriman dibatalkan.');
         setTimeout(clearStatus, 3000);
     });
 
-    // ===================== FETCH DENGAN TIMEOUT (KOMPATIBEL LAMA) =====================
+    // ===================== FETCH DENGAN TIMEOUT =====================
     function fetchWithTimeout(url, options, timeout) {
         timeout = timeout || FETCH_TIMEOUT;
         return new Promise(function(resolve, reject) {
-            var controller;
-            var timeoutId;
+            var controller = null;
+            var timeoutId = null;
             
             if (typeof AbortController !== 'undefined') {
                 controller = new AbortController();
                 timeoutId = setTimeout(function() {
                     controller.abort();
+                    reject(new Error('timeout'));
                 }, timeout);
             } else {
-                // Fallback untuk browser lama
                 timeoutId = setTimeout(function() {
                     reject(new Error('timeout'));
                 }, timeout);
@@ -1724,42 +1637,13 @@
         });
     }
 
-    // ===================== TES KONEKSI SERVER (HEALTH CHECK) =====================
-    function testConnection() {
-        setSyncStatus('syncing');
-        fetchWithTimeout(API_URL + '?action=health', {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' },
-            mode: 'cors'
-        }, 10000).then(function(response) {
-            return response.text();
-        }).then(function(text) {
-            var result;
-            try {
-                result = JSON.parse(text);
-            } catch (e) {
-                setSyncStatus('error');
-                return;
-            }
-            
-            if (result && result.success) {
-                setSyncStatus('synced');
-            } else {
-                setSyncStatus('error');
-            }
-        }).catch(function(error) {
-            console.error('Connection test failed:', error);
-            setSyncStatus('error');
-        });
-    }
-
     // ===================== SUBMIT KE SERVER =====================
     function submitToServer(payload, retryCount) {
         retryCount = retryCount || 0;
         setLoading(true);
         clearStatus();
         setSyncStatus('syncing');
-
+        
         var submissionId = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
         var clientId = getClientId();
         
@@ -1774,7 +1658,6 @@
         dataWithSheet.clientId = clientId;
         
         var encodedData = encodeBase64(dataWithSheet);
-        
         var requestBody = { data: encodedData };
         if (API_KEY) requestBody.apiKey = API_KEY;
         
@@ -1788,25 +1671,38 @@
             mode: 'cors',
             cache: 'no-store'
         }, FETCH_TIMEOUT).then(function(response) {
-            return response.text();
-        }).then(function(responseText) {
-            var result;
+            return response.text().then(function(text) {
+                return { response: response, text: text };
+            });
+        }).then(function(result) {
+            var response = result.response;
+            var responseText = result.text;
+            
+            var jsonResult;
             try {
-                result = JSON.parse(responseText);
+                jsonResult = JSON.parse(responseText);
             } catch (jsonError) {
                 console.error('Invalid JSON response:', responseText);
-                throw new Error('Server mengembalikan respons yang tidak valid.');
+                showStatus('error', '❌ Server mengembalikan respons yang tidak valid.');
+                setSyncStatus('error');
+                isSubmitting = false;
+                setLoading(false);
+                return;
             }
             
             if (!response.ok) {
-                throw new Error('HTTP ' + response.status + ': ' + (result.message || response.statusText));
+                showStatus('error', '❌ HTTP ' + response.status + ': ' + (jsonResult.message || response.statusText));
+                setSyncStatus('error');
+                isSubmitting = false;
+                setLoading(false);
+                return;
             }
             
-            if (result.success) {
+            if (jsonResult.success) {
                 var certMsg = '';
-                if (result.certificate && result.certificate.success) {
+                if (jsonResult.certificate && jsonResult.certificate.success) {
                     certMsg = ' ✅ Sertifikat berhasil dikirim ke email.';
-                } else if (result.certificate && !result.certificate.success) {
+                } else if (jsonResult.certificate && !jsonResult.certificate.success) {
                     certMsg = ' ⚠️ Absen tersimpan, tetapi sertifikat gagal dikirim.';
                 } else {
                     certMsg = ' ✅ Data tersimpan.';
@@ -1823,18 +1719,18 @@
                     splashScreen.classList.remove('splash-hidden');
                     splashScreen.focus();
                 }, 5000);
-            } else if (result.duplicate && result.field === 'email') {
+            } else if (jsonResult.duplicate && jsonResult.field === 'email') {
                 showStatus('warning', '⚠️ Email sudah terdaftar. Gunakan email lain.');
                 showFieldError('email', 'Email sudah terdaftar');
                 setSyncStatus('error');
                 isSubmitting = false;
-            } else if (result.duplicate && result.field === 'whatsapp') {
+            } else if (jsonResult.duplicate && jsonResult.field === 'whatsapp') {
                 showStatus('warning', '⚠️ Nomor WhatsApp sudah terdaftar.');
                 showFieldError('whatsapp', 'Nomor sudah terdaftar');
                 setSyncStatus('error');
                 isSubmitting = false;
             } else {
-                showStatus('error', '❌ ' + (result.message || 'Pengiriman gagal. Silakan coba lagi.'));
+                showStatus('error', '❌ ' + (jsonResult.message || 'Pengiriman gagal. Silakan coba lagi.'));
                 setSyncStatus('error');
                 isSubmitting = false;
             }
@@ -1842,7 +1738,7 @@
         }).catch(function(error) {
             console.error('Submit error:', error);
             
-            if (error.name === 'AbortError' || error.message === 'timeout') {
+            if (error.message === 'timeout') {
                 showStatus('error', '⏱️ Waktu koneksi habis. Periksa koneksi internet Anda.');
                 setSyncStatus('error');
                 isSubmitting = false;
@@ -1851,7 +1747,7 @@
             }
             
             if (error instanceof TypeError) {
-                showStatus('error', '🌐 Gagal terhubung ke server. Kemungkinan masalah CORS atau jaringan.');
+                showStatus('error', '🌐 Gagal terhubung ke server. Periksa koneksi internet Anda.');
                 setSyncStatus('error');
                 isSubmitting = false;
                 setLoading(false);
@@ -1859,12 +1755,12 @@
             }
             
             if (retryCount < MAX_RETRIES) {
-                showStatus('warning', '🔄 Gagal terhubung. Mencoba ulang (' + (retryCount + 1) + '/' + MAX_RETRIES + ')...');
+                showStatus('warning', '🔄 Mencoba ulang...');
                 setTimeout(function() {
                     submitToServer(payload, retryCount + 1);
-                }, RETRY_DELAY * (retryCount + 1));
+                }, RETRY_DELAY);
             } else {
-                showStatus('error', '❌ Gagal terhubung ke server. Periksa koneksi internet Anda.');
+                showStatus('error', '❌ Gagal terhubung ke server. Silakan coba lagi nanti.');
                 setSyncStatus('error');
                 isSubmitting = false;
                 setLoading(false);
@@ -1888,7 +1784,7 @@
 
         var honeypot = document.getElementById('website').value;
         if (honeypot) {
-            showStatus('error', '❌ Spam terdeteksi. Form tidak bisa diproses.');
+            showStatus('error', '❌ Spam terdeteksi.');
             return;
         }
 
@@ -1896,8 +1792,8 @@
         var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
         
         if (!peran || validPeran.indexOf(peran) === -1) {
-            showFieldError('peran', '❌ Pilih peran yang valid: Narasumber, Panitia, atau Peserta');
-            showStatus('error', '❌ Peran tidak valid. Silakan pilih Narasumber, Panitia, atau Peserta.');
+            showFieldError('peran', '❌ Pilih peran yang valid.');
+            showStatus('error', '❌ Peran tidak valid.');
             return;
         } else {
             clearFieldError('peran');
@@ -1907,8 +1803,8 @@
         var validKehadiran = ['Offline', 'Online'];
         
         if (!kehadiran || validKehadiran.indexOf(kehadiran) === -1) {
-            showFieldError('kehadiran', '❌ Pilih kehadiran yang valid: Offline atau Online');
-            showStatus('error', '❌ Kehadiran tidak valid. Silakan pilih Offline atau Online.');
+            showFieldError('kehadiran', '❌ Pilih kehadiran yang valid.');
+            showStatus('error', '❌ Kehadiran tidak valid.');
             return;
         } else {
             clearFieldError('kehadiran');
@@ -1975,9 +1871,6 @@
         splashScreen.focus();
         setSyncStatus('synced');
         checkFormAccess();
-        
-        // Tes koneksi ke server
-        testConnection();
     }
 
     if (document.readyState === 'loading') {
