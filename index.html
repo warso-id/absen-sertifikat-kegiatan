@@ -385,6 +385,13 @@
             flex-wrap: wrap;
             gap: 12px;
             margin-top: 4px;
+            transition: all 0.3s ease;
+        }
+        .radio-group.error {
+            border: 2px solid #f87171;
+            border-radius: 16px;
+            padding: 8px;
+            background: rgba(248, 113, 113, 0.05);
         }
         .radio-option {
             position: relative;
@@ -424,10 +431,11 @@
         }
         .radio-option input[type="radio"]:checked + .radio-label {
             border-color: #4ade80;
-            background: rgba(74, 222, 128, 0.15);
+            background: rgba(74, 222, 128, 0.2);
             color: #4ade80;
-            box-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
-            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+            transform: scale(1.05);
+            animation: radioPulse 0.3s ease;
         }
         .radio-option input[type="radio"]:focus-visible + .radio-label {
             outline: 3px solid #4ade80;
@@ -439,6 +447,12 @@
         }
         .radio-icon {
             font-size: 18px;
+        }
+
+        @keyframes radioPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1.05); }
         }
 
         .field-hint {
@@ -870,7 +884,7 @@
             <div class="countdown-timer" id="countdownTimer">00:00:00</div>
         </div>
         <div class="countdown-info" id="lockModalInfo">
-            📅 Tanggal: 27 Agustus 2026<br>
+            📅 Tanggal: 22 Agustus 2026<br>
             ⏰ Waktu: 09:00 - 16:00 WIB
         </div>
         <button class="lock-close-btn" id="lockCloseBtn">Tutup</button>
@@ -900,7 +914,7 @@
                 <div class="logo-fallback">🎓</div>
             </div>
             <h1 class="title">📝 Form Sertifikat Kegiatan</h1>
-            <div class="subtitle">Pelatihan Analisis Data Kuantitatif SEM SmartPLS • 27 Agustus 2026</div>
+            <div class="subtitle">Pelatihan Analisis Data Kuantitatif • 27 Agustus 2026</div>
         </div>
 
         <!-- Live Sync Indicator -->
@@ -1084,7 +1098,7 @@
         formLockStatus.className = 'status warning show';
         formLockStatus.textContent = message;
         
-        document.querySelectorAll('#registrationForm input, #registrationForm select').forEach(input => {
+        document.querySelectorAll('#registrationForm input').forEach(input => {
             input.disabled = true;
         });
         submitButton.disabled = true;
@@ -1096,7 +1110,7 @@
         formLockStatus.className = 'status success show';
         formLockStatus.textContent = '✅ Form sudah dibuka. Silakan isi absen Anda.';
         
-        document.querySelectorAll('#registrationForm input, #registrationForm select').forEach(input => {
+        document.querySelectorAll('#registrationForm input').forEach(input => {
             input.disabled = false;
         });
         submitButton.disabled = false;
@@ -1258,6 +1272,14 @@
         }
         const input = document.getElementById(fieldId);
         if (input) input.setAttribute('aria-invalid', 'true');
+        
+        // Tambahkan class error ke radio group jika ada
+        if (fieldId === 'peran') {
+            document.getElementById('peranRadioGroup').classList.add('error');
+        }
+        if (fieldId === 'kehadiran') {
+            document.getElementById('kehadiranRadioGroup').classList.add('error');
+        }
     }
 
     function clearFieldError(fieldId) {
@@ -1268,6 +1290,14 @@
         }
         const input = document.getElementById(fieldId);
         if (input) input.setAttribute('aria-invalid', 'false');
+        
+        // Hapus class error dari radio group jika ada
+        if (fieldId === 'peran') {
+            document.getElementById('peranRadioGroup').classList.remove('error');
+        }
+        if (fieldId === 'kehadiran') {
+            document.getElementById('kehadiranRadioGroup').classList.remove('error');
+        }
     }
 
     // ===================== LOADING =====================
@@ -1292,56 +1322,132 @@
         return clientId;
     }
 
+    // ===================== VALIDASI RADIO BUTTON =====================
+    function validateRadioGroup(groupName, errorFieldId, errorMessage) {
+        const radios = document.getElementsByName(groupName);
+        let selectedValue = '';
+        let isValid = false;
+        
+        // Cek apakah ada yang dipilih
+        for (const radio of radios) {
+            if (radio.checked) {
+                selectedValue = radio.value;
+                isValid = true;
+                break;
+            }
+        }
+        
+        // Validasi nilai yang dipilih
+        const validValues = {
+            'peran': ['Narasumber', 'Panitia', 'Peserta'],
+            'kehadiran': ['Offline', 'Online']
+        };
+        
+        if (isValid && validValues[groupName] && !validValues[groupName].includes(selectedValue)) {
+            isValid = false;
+            showFieldError(errorFieldId, `Nilai ${groupName} tidak valid`);
+        } else if (!isValid) {
+            showFieldError(errorFieldId, errorMessage);
+        } else {
+            clearFieldError(errorFieldId);
+        }
+        
+        return isValid ? selectedValue : '';
+    }
+
+    // ===================== GET SELECTED RADIO (DENGAN VALIDASI) =====================
+    function getSelectedRadioValue(groupName) {
+        const radios = document.getElementsByName(groupName);
+        
+        // Validasi nilai yang diperbolehkan
+        const validValues = {
+            'peran': ['Narasumber', 'Panitia', 'Peserta'],
+            'kehadiran': ['Offline', 'Online']
+        };
+        
+        for (const radio of radios) {
+            if (radio.checked) {
+                // Pastikan nilai yang dipilih valid
+                if (validValues[groupName] && validValues[groupName].includes(radio.value)) {
+                    return radio.value;
+                } else if (!validValues[groupName]) {
+                    return radio.value;
+                }
+            }
+        }
+        return ''; // Tidak ada yang dipilih atau nilai tidak valid
+    }
+
+    // ===================== SET SELECTED RADIO (DENGAN VALIDASI) =====================
+    function setSelectedRadioValue(groupName, value) {
+        const radios = document.getElementsByName(groupName);
+        const validValues = {
+            'peran': ['Narasumber', 'Panitia', 'Peserta'],
+            'kehadiran': ['Offline', 'Online']
+        };
+        
+        // Validasi nilai sebelum diset
+        if (validValues[groupName] && !validValues[groupName].includes(value)) {
+            console.error(`Nilai "${value}" tidak valid untuk ${groupName}`);
+            return false;
+        }
+        
+        for (const radio of radios) {
+            if (radio.value === value) {
+                radio.checked = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ===================== VALIDASI PERAN REAL-TIME =====================
+    function validatePeranRealTime() {
+        const selectedPeran = getSelectedRadioValue('peran');
+        const validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        
+        if (!selectedPeran) {
+            showFieldError('peran', '⚠️ Silakan pilih salah satu: Narasumber, Panitia, atau Peserta');
+            return false;
+        } else if (!validPeran.includes(selectedPeran)) {
+            showFieldError('peran', '❌ Nilai peran tidak valid. Pilih Narasumber, Panitia, atau Peserta');
+            return false;
+        } else {
+            clearFieldError('peran');
+            return true;
+        }
+    }
+
+    // ===================== VALIDASI KEHADIRAN REAL-TIME =====================
+    function validateKehadiranRealTime() {
+        const selectedKehadiran = getSelectedRadioValue('kehadiran');
+        const validKehadiran = ['Offline', 'Online'];
+        
+        if (!selectedKehadiran) {
+            showFieldError('kehadiran', '⚠️ Silakan pilih salah satu: Offline atau Online');
+            return false;
+        } else if (!validKehadiran.includes(selectedKehadiran)) {
+            showFieldError('kehadiran', '❌ Nilai kehadiran tidak valid. Pilih Offline atau Online');
+            return false;
+        } else {
+            clearFieldError('kehadiran');
+            return true;
+        }
+    }
+
     // ===================== AUTO-SAVE DRAFT =====================
     const saveDraft = debounce(() => {
         const draft = {
-            peran: getSelectedPeran(),
+            peran: getSelectedRadioValue('peran'),
             nama: document.getElementById('nama').value,
             email: document.getElementById('email').value,
             whatsapp: document.getElementById('whatsapp').value,
-            kehadiran: getSelectedKehadiran(),
+            kehadiran: getSelectedRadioValue('kehadiran'),
             timestamp: Date.now()
         };
         localStorage.setItem('formDraft', JSON.stringify(draft));
         setSyncStatus('synced');
     }, 500);
-
-    // ===================== GET SELECTED RADIO =====================
-    function getSelectedPeran() {
-        const radios = document.getElementsByName('peran');
-        for (const radio of radios) {
-            if (radio.checked) return radio.value;
-        }
-        return '';
-    }
-
-    function getSelectedKehadiran() {
-        const radios = document.getElementsByName('kehadiran');
-        for (const radio of radios) {
-            if (radio.checked) return radio.value;
-        }
-        return '';
-    }
-
-    function setSelectedPeran(value) {
-        const radios = document.getElementsByName('peran');
-        for (const radio of radios) {
-            if (radio.value === value) {
-                radio.checked = true;
-                break;
-            }
-        }
-    }
-
-    function setSelectedKehadiran(value) {
-        const radios = document.getElementsByName('kehadiran');
-        for (const radio of radios) {
-            if (radio.value === value) {
-                radio.checked = true;
-                break;
-            }
-        }
-    }
 
     // ===================== LOAD DRAFT =====================
     function loadDraft() {
@@ -1350,11 +1456,11 @@
             try {
                 const data = JSON.parse(draft);
                 if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-                    setSelectedPeran(data.peran || '');
+                    setSelectedRadioValue('peran', data.peran || '');
                     document.getElementById('nama').value = data.nama || '';
                     document.getElementById('email').value = data.email || '';
                     document.getElementById('whatsapp').value = data.whatsapp || '';
-                    setSelectedKehadiran(data.kehadiran || '');
+                    setSelectedRadioValue('kehadiran', data.kehadiran || '');
                 }
             } catch (e) {
                 console.error('Error loading draft:', e);
@@ -1397,23 +1503,6 @@
         }
     }, 300);
 
-    // ===================== VALIDASI RADIO REAL-TIME =====================
-    function validateRadioRealTime(groupName, errorFieldId, errorMessage) {
-        const radios = document.getElementsByName(groupName);
-        let selected = false;
-        for (const radio of radios) {
-            if (radio.checked) {
-                selected = true;
-                break;
-            }
-        }
-        if (!selected) {
-            showFieldError(errorFieldId, errorMessage);
-        } else {
-            clearFieldError(errorFieldId);
-        }
-    }
-
     // ===================== EVENT LISTENERS =====================
     ['nama', 'email', 'whatsapp'].forEach(fieldId => {
         const field = document.getElementById(fieldId);
@@ -1436,9 +1525,14 @@
 
     // Event listener untuk radio button peran
     document.getElementsByName('peran').forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (!radio.disabled) {
-                validateRadioRealTime('peran', 'peran', 'Silakan pilih peran Anda');
+        radio.addEventListener('change', function() {
+            if (!this.disabled) {
+                const isValid = validatePeranRealTime();
+                if (isValid) {
+                    console.log('✅ Peran valid:', this.value);
+                } else {
+                    console.log('❌ Peran tidak valid');
+                }
                 saveDraft();
                 setSyncStatus('syncing');
                 setTimeout(() => setSyncStatus('synced'), 300);
@@ -1448,9 +1542,14 @@
 
     // Event listener untuk radio button kehadiran
     document.getElementsByName('kehadiran').forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (!radio.disabled) {
-                validateRadioRealTime('kehadiran', 'kehadiran', 'Silakan pilih kehadiran Anda');
+        radio.addEventListener('change', function() {
+            if (!this.disabled) {
+                const isValid = validateKehadiranRealTime();
+                if (isValid) {
+                    console.log('✅ Kehadiran valid:', this.value);
+                } else {
+                    console.log('❌ Kehadiran tidak valid');
+                }
                 saveDraft();
                 setSyncStatus('syncing');
                 setTimeout(() => setSyncStatus('synced'), 300);
@@ -1669,21 +1768,36 @@
             return;
         }
 
-        const peran = getSelectedPeran();
+        // Validasi peran dengan ketat
+        const peran = getSelectedRadioValue('peran');
+        const validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        
+        if (!peran || !validPeran.includes(peran)) {
+            showFieldError('peran', '❌ Pilih peran yang valid: Narasumber, Panitia, atau Peserta');
+            showStatus('error', '❌ Peran tidak valid. Silakan pilih Narasumber, Panitia, atau Peserta.');
+            return;
+        } else {
+            clearFieldError('peran');
+        }
+
+        // Validasi kehadiran dengan ketat
+        const kehadiran = getSelectedRadioValue('kehadiran');
+        const validKehadiran = ['Offline', 'Online'];
+        
+        if (!kehadiran || !validKehadiran.includes(kehadiran)) {
+            showFieldError('kehadiran', '❌ Pilih kehadiran yang valid: Offline atau Online');
+            showStatus('error', '❌ Kehadiran tidak valid. Silakan pilih Offline atau Online.');
+            return;
+        } else {
+            clearFieldError('kehadiran');
+        }
+
         const nama = document.getElementById('nama').value.trim();
         const email = document.getElementById('email').value.trim().toLowerCase();
         const whatsappInput = document.getElementById('whatsapp').value.trim();
         const whatsapp = normalizeWhatsApp(whatsappInput);
-        const kehadiran = getSelectedKehadiran();
 
         let isValid = true;
-
-        if (!peran) {
-            showFieldError('peran', 'Silakan pilih peran Anda');
-            isValid = false;
-        } else {
-            clearFieldError('peran');
-        }
 
         if (!nama || nama.length < 2) {
             showFieldError('nama', 'Nama minimal 2 karakter');
@@ -1704,13 +1818,6 @@
             isValid = false;
         } else {
             clearFieldError('whatsapp');
-        }
-
-        if (!kehadiran) {
-            showFieldError('kehadiran', 'Silakan pilih kehadiran Anda');
-            isValid = false;
-        } else {
-            clearFieldError('kehadiran');
         }
 
         if (!isValid) {
