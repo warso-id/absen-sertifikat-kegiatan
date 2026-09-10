@@ -1791,6 +1791,7 @@
         }
 
         var peran = getSelectedRadioValue('peran');
+        // ✅ FIX: Tambahkan 'Moderator' ke validPeran agar tidak ditolak saat submit
         var validPeran = ['Narasumber', 'Moderator', 'Panitia', 'Peserta'];
         
         if (!peran || validPeran.indexOf(peran) === -1) {
