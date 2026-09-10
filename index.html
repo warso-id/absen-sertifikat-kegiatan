@@ -988,8 +988,8 @@
             <div class="countdown-timer" id="countdownTimer">00:00:00</div>
         </div>
         <div class="countdown-info" id="lockModalInfo">
-            📅 Tanggal: 28 Agustus 2026<br>
-            ⏰ Waktu: 08:15 - 16:00 WIB
+            📅 Tanggal: 11 September 2026<br>
+            ⏰ Waktu: 07:30 - 16:00 WIB
         </div>
         <button class="lock-close-btn" id="lockCloseBtn">Tutup</button>
     </div>
@@ -1018,7 +1018,7 @@
                 <div class="logo-fallback">🎓</div>
             </div>
             <h1 class="title">📝 Form Sertifikat Kegiatan</h1>
-            <div class="subtitle">Pelatihan Kualitatif NVivo • 28 Agustus 2026</div>
+            <div class="subtitle">Matrikulasi & Kuliah Umumo • 11 September 2026</div>
         </div>
 
         <!-- Live Sync Indicator -->
@@ -1055,6 +1055,13 @@
                             <span class="radio-icon">🎤</span> Narasumber
                         </label>
                     </div>
+                    <div class="radio-option">
+                        <input type="radio" id="peranPanitia" name="peran" value="Moderator" required aria-required="true" disabled>
+                        <label for="peranPanitia" class="radio-label">
+                            <span class="radio-icon">🛠️</span> Moderator
+                        </label>
+                    </div>
+                    
                     <div class="radio-option">
                         <input type="radio" id="peranPanitia" name="peran" value="Panitia" required aria-required="true" disabled>
                         <label for="peranPanitia" class="radio-label">
@@ -1123,15 +1130,15 @@
     // ===================== KONFIGURASI =====================
     var API_URL = 'https://script.google.com/macros/s/AKfycbwVbaaj7XhoH0PBO97NQl1K3anQI8r5C01JAa3eaBqDF1tJEvAM6D9ZP8Qx548eUxI0dA/exec';
     var FETCH_TIMEOUT = 60000;
-    var SHEET_NAME = 'Pelatihan Kualitatif NVivo';
+    var SHEET_NAME = 'Matrikulasi&KuliahUmum2026-2027';
     var MAX_RETRIES = 1;
     var RETRY_DELAY = 5000;
     var API_KEY = '';
 
     var CONFIG_WAKTU = {
-        tanggal: '2026-08-30',
-        mulai: '13:00',
-        selesai: '18:00'
+        tanggal: '2026-09-11',
+        mulai: '07:30',
+        selesai: '23:59'
     };
 
     var isSubmitting = false;
