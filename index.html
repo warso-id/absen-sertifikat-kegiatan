@@ -1056,12 +1056,11 @@
                         </label>
                     </div>
                     <div class="radio-option">
-                        <input type="radio" id="peranPanitia" name="peran" value="Moderator" required aria-required="true" disabled>
-                        <label for="peranPanitia" class="radio-label">
-                            <span class="radio-icon">🛠️</span> Moderator
+                        <input type="radio" id="peranModerator" name="peran" value="Moderator" required aria-required="true" disabled>
+                        <label for="peranModerator" class="radio-label">
+                            <span class="radio-icon">🎙️</span> Moderator
                         </label>
                     </div>
-                    
                     <div class="radio-option">
                         <input type="radio" id="peranPanitia" name="peran" value="Panitia" required aria-required="true" disabled>
                         <label for="peranPanitia" class="radio-label">
@@ -1400,7 +1399,7 @@
     function getSelectedRadioValue(groupName) {
         var radios = document.getElementsByName(groupName);
         var validValues = {
-            'peran': ['Narasumber', 'Panitia', 'Peserta'],
+            'peran': ['Narasumber', 'Moderator', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
         };
         
@@ -1419,7 +1418,7 @@
     function setSelectedRadioValue(groupName, value) {
         var radios = document.getElementsByName(groupName);
         var validValues = {
-            'peran': ['Narasumber', 'Panitia', 'Peserta'],
+            'peran': ['Narasumber', 'Moderator', 'Panitia', 'Peserta'],
             'kehadiran': ['Offline', 'Online']
         };
         
@@ -1438,10 +1437,10 @@
 
     function validatePeranRealTime() {
         var selectedPeran = getSelectedRadioValue('peran');
-        var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        var validPeran = ['Narasumber', 'Moderator', 'Panitia', 'Peserta'];
         
         if (!selectedPeran) {
-            showFieldError('peran', '⚠️ Silakan pilih salah satu: Narasumber, Panitia, atau Peserta');
+            showFieldError('peran', '⚠️ Silakan pilih salah satu: Narasumber, Moderator, Panitia, atau Peserta');
             return false;
         } else if (validPeran.indexOf(selectedPeran) === -1) {
             showFieldError('peran', '❌ Nilai peran tidak valid.');
@@ -1792,7 +1791,7 @@
         }
 
         var peran = getSelectedRadioValue('peran');
-        var validPeran = ['Narasumber', 'Panitia', 'Peserta'];
+        var validPeran = ['Narasumber', 'Moderator', 'Panitia', 'Peserta'];
         
         if (!peran || validPeran.indexOf(peran) === -1) {
             showFieldError('peran', '❌ Pilih peran yang valid.');
